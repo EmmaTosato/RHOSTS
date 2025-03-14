@@ -92,12 +92,14 @@ def load_normaltxt(path_single_file):
 
 class simplicial_complex_mvts():
     def __init__(self, multivariate_time_series, null_model_flag):
+
+        # Rows and columns
         nR, T = np.shape(multivariate_time_series)
 
         # Variables
         self.raw_data = multivariate_time_series
-        self.num_ROI = nR
-        self.T = T
+        self.num_ROI = nR                           # Nodes = regions of interest
+        self.T = T                                  # Time points
 
         # Edges
         self.ets_indexes = {}
@@ -140,9 +142,9 @@ class simplicial_complex_mvts():
     # Initial setup: computation of the edges and triplets
     def compute_edges_triplets(self):
         #-------------------------EDGES-----------------------------
-        # Number of edges
+        # Number of possible edges as combination of nodes
         N_edges = int(binomial(self.num_ROI, 2))
-        # Indices for the products
+        # Indices for the products: (i, j) with i<j
         u, v = np.triu_indices(self.num_ROI, k=1, m=self.num_ROI)
         self.ets_zscore = np.zeros((N_edges, 2))
         self.ets_max = np.zeros((self.T))
@@ -150,9 +152,9 @@ class simplicial_complex_mvts():
         l_index_next = self.num_ROI - 1
         gap = l_index_next - l_index_prev
 
-        # To save memory, ets_zscore will save the mean and std of each independent time series
+        # To save memory, ets_zscore will save the mean and standard deviation of each edge's interaction over time
         # instead of all the z-scored edges
-        # ets_max -> is a vector 1xT containing the maximum between all the z-scored edges
+        # ets_max is a vector 1xT containing the maximum absolute Z-score observed at each time point across all edges
         # To decrease the RAM usage, the product is done in batches of size < N
         for i in range(self.num_ROI):
             c_prod = self.raw_data[u[l_index_prev:l_index_next]
