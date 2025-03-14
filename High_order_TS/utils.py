@@ -1,5 +1,6 @@
 # Importing the libraries
 import numpy as np
+import pandas as pd
 import sys
 import scipy.io as sio  # For reading the matlab .mat format
 from scipy.stats import zscore, entropy
@@ -152,9 +153,9 @@ class simplicial_complex_mvts():
         l_index_next = self.num_ROI - 1
         gap = l_index_next - l_index_prev
 
-        # To save memory, ets_zscore will save the mean and standard deviation of each edge's interaction over time
-        # instead of all the z-scored edges
-        # ets_max is a vector 1xT containing the maximum absolute Z-score observed at each time point across all edges
+        # To save memory,
+        # - ets_zscore will save the mean and standard deviation of each edge's interaction over time instead of all the z-scored edges
+        # - ets_max is a vector 1xT containing the maximum absolute Z-score observed at each time point across all edges
         # To decrease the RAM usage, the product is done in batches of size < N
         for i in range(self.num_ROI):
             c_prod = self.raw_data[u[l_index_prev:l_index_next]
@@ -188,7 +189,7 @@ class simplicial_complex_mvts():
         # Same as above,
         # To save memory, triplets_ts_zscore will save the mean and std of each independent triplet time series
         # instead of all the z-scored triplets
-        # triplets_max -> is a vector 1xT containing the maximum between all the z-scored triplets
+        # triplets_max -> is a vector 1xT containing the maximum between all the z-scored observed at each time point across all triplets
         # To decrease the RAM usage, the product is done in batches of size < N*(N-1)
         for i in range(self.num_ROI):
             #
@@ -207,8 +208,6 @@ class simplicial_complex_mvts():
             gap = l_index_next - l_index_prev
         # Saving the indices of all the triplets
         self.triplets_indexes = dict(zip(np.arange(N_triplets), indices))
-
-
 
     # Function that, for a specific time t, computes the maximum between edges and triplets
     # This is used to replace the infty term after computing the persistence diagram
@@ -237,7 +236,8 @@ class simplicial_complex_mvts():
         # Creating the list of simplicial complex with all the edges and triangles
         list_simplices = []
 
-        # Selecting the extremal weight between edges and triplets. It will be assigned to all the nodes (i.e. nodes enter at the same instant)
+        # Finds the maximum weight among all edges and triplets for this time step.
+        # It will be assigned to all the nodes (i.e. nodes enter at the same instant)
         m_weight = np.max([np.ceil(self.triplets_max[t_current]), np.ceil(
             self.ets_max[t_current])])
         # Adding all the nodes from the beginning with the same weights
