@@ -174,6 +174,7 @@ class simplicial_complex_mvts():
         for i in range(self.num_ROI):
             c_prod = self.raw_data[u[l_index_prev:l_index_next]
                                    ] * self.raw_data[v[l_index_prev:l_index_next]]
+            print(f"Shape: {c_prod.shape}")
             self.ets_zscore[l_index_prev:l_index_next] = np.array(
                 [np.mean(c_prod, axis=1), np.std(c_prod, axis=1)]).T
             self.ets_max = np.max(
@@ -207,7 +208,7 @@ class simplicial_complex_mvts():
         # To decrease the RAM usage, the product is done in batches of size < N*(N-1)
         for i in range(self.num_ROI):
             #
-            # print(i,l_index_prev,l_index_next)
+            #print(i,l_index_prev,l_index_next)
             c_prod = self.raw_data[u[l_index_prev:l_index_next]] * \
                 self.raw_data[v[l_index_prev:l_index_next]] * \
                 self.raw_data[w[l_index_prev:l_index_next]]
@@ -421,8 +422,8 @@ def compute_edgeweight(list_violations, num_ROI):
                 edge_weight[edgeID] = [weight, 1.0]
     return(edge_weight)
 
-
-def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='/home/andrea/javaplex/lib/',
+## Todo
+def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='home/andrea/javaplex/lib/',
                      save_generators=True, verbose=False, python_persistenthomologypath='persistent_homology_calculation.py'):
     '''
     Function that calls the jython code to compute the scaffold.

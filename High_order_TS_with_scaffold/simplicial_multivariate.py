@@ -48,6 +48,8 @@ def launch_code_one_t(t):
     # dict_file = 'PD_{0}.pck'.format(t)
     # pk.dump(dgms1_clean,open(dict_file,'wb'))
 
+    temp = ts_simplicial.javaplex_path
+
     # If flag is activated, compute the scaffold and save the list of generators on file
     # The function below uses jython (and the corresponding code: persistent_homology_calculation.py)
     if ts_simplicial.javaplex_path != False:
@@ -61,13 +63,13 @@ def launch_code_one_t(t):
     # Since the signs of the persistence diagram are flipped,
     # then Fully Coherent contributes identify points with birth and death <=0
     dgms1_complexity_FC = dgms1_clean[(
-        dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
+                                              dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
     # Coherent Transition contributes identify points with birth < 0 and death > 0
     dgms1_complexity_CT = dgms1_clean[(
-        dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
+                                              dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
     # Fully Decoherence contributes identify points with birth > 0 and death > 0
     dgms1_complexity_FD = dgms1_clean[(
-        dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
+                                              dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
 
     # Computing the Wasserstein distances
     complexity_FC = persim.sliced_wasserstein(
@@ -87,12 +89,13 @@ def launch_code_one_t(t):
     # we compute the downward projection at the level of edges
     edge_weights = compute_edgeweight(list_violation_fully_coherence, n_ROI)
 
-    # Report the results in a vector and print everything 
+    # Report the results in a vector and print everything
     # (except the downward projections) on standard output
     results = [t, hyper_complexity, complexity_FC, complexity_CT,
                complexity_FD, hyper_coherence, avg_edge_violation, edge_weights]
 
-    return(results)
+    return (results)
+
 
 
 ############# MAIN CODE #############
@@ -157,12 +160,13 @@ if __name__ == "__main__":
     pool = Pool(processes=ncores, initializer=create_simplicial_framework_from_data,
                 initargs=(data_TS, null_model_flag, folder_javaplex, scaffold_outdir))
 
+
     if t_init == 0 and t_end == 0:  # By default, the script does the analysis on all the time points
         t_end=np.shape(data_TS)[1]
         t_total = [t for t in range(t_init, t_end)]
 
     # Parallel computation
     for i in t_total:
-        pool.apply_async(launch_code_one_t, (i, ), callback=handle_output)
+        pool.apply_async(launch_code_one_t, (i,), callback=handle_output)
     pool.close()
     pool.join()

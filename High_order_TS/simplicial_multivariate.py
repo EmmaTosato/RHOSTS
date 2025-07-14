@@ -3,7 +3,6 @@ from multiprocessing import Pool
 import h5py
 import os
 
-
 ## Create the structure containing all the edges and triplets for every time t
 def create_simplicial_framework_from_data(data, null_model_flag):
     global ts_simplicial
@@ -33,8 +32,7 @@ def handle_output(result):
 ##Launch the bulk of the code for a single time point
 def launch_code_one_t(t):
     # Computing the simplicial filtration for the time t
-    list_simplices_positive, list_violation_fully_coherence, hyper_coherence = ts_simplicial.create_simplicial_complex(
-        t)
+    list_simplices_positive, list_violation_fully_coherence, hyper_coherence = ts_simplicial.create_simplicial_complex(t)
     # Computing the persistence diagram using cechmate
     dgms1 = compute_persistence_diagram_cechmate(list_simplices_positive)
     # Maximum value that will be used to replace the inf term (important for the WS distance)
@@ -44,7 +42,6 @@ def launch_code_one_t(t):
         dgms1, max_filtration_weight)
     # dict_file = 'PD_{0}.pck'.format(t)
     # pk.dump(dgms1_clean,open(dict_file,'wb'))
-
 
     # Computing the hyper-complexity indicator as the Wasserstein distance with the empty space
     hyper_complexity = persim.sliced_wasserstein(dgms1_clean, np.array([]))
@@ -78,13 +75,12 @@ def launch_code_one_t(t):
     # we compute the downward projection at the level of edges
     edge_weights = compute_edgeweight(list_violation_fully_coherence, n_ROI)
 
-    # Report the results in a vector and print everything 
+    # Report the results in a vector and print everything
     # (except the downward projections) on standard output
     results = [t, hyper_complexity, complexity_FC, complexity_CT,
                complexity_FD, hyper_coherence, avg_edge_violation, edge_weights]
 
     return(results)
-
 
 
 ############# MAIN CODE #############

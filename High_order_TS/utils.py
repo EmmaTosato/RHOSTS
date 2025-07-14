@@ -94,7 +94,7 @@ def load_normaltxt(path_single_file):
 class simplicial_complex_mvts():
     def __init__(self, multivariate_time_series, null_model_flag):
 
-        # Rows and columns
+        # Rows and columns = ROI and time points
         nR, T = np.shape(multivariate_time_series)
 
         # Variables
@@ -143,25 +143,33 @@ class simplicial_complex_mvts():
     # Initial setup: computation of the edges and triplets
     def compute_edges_triplets(self):
         #-------------------------EDGES-----------------------------
+
         # Number of possible edges as combination of nodes
         N_edges = int(binomial(self.num_ROI, 2))
-        # Indices for the products: (i, j) with i<j
+        # Indices for the products i,j with i<j for the edges: all pairwise combinations without repetition
         u, v = np.triu_indices(self.num_ROI, k=1, m=self.num_ROI)
+
+        # Initialize storage arrays
         self.ets_zscore = np.zeros((N_edges, 2))
         self.ets_max = np.zeros((self.T))
+
+        # Initializing the batch division
         l_index_prev = 0
         l_index_next = self.num_ROI - 1
         gap = l_index_next - l_index_prev
 
-        # To save memory,
-        # - ets_zscore will save the mean and standard deviation of each edge's interaction over time instead of all the z-scored edges
-        # - ets_max is a vector 1xT containing the maximum absolute Z-score observed at each time point across all edges
+        # To save memory, ets_zscore will save the mean and std of each independent time series
+        # instead of all the z-scored edges
+        # ets_max -> is a vector 1xT containing the maximum between all the z-scored edges
         # To decrease the RAM usage, the product is done in batches of size < N
         for i in range(self.num_ROI):
+            # Compute the element-wise product of signals
             c_prod = self.raw_data[u[l_index_prev:l_index_next]
                                    ] * self.raw_data[v[l_index_prev:l_index_next]]
+
             self.ets_zscore[l_index_prev:l_index_next] = np.array(
                 [np.mean(c_prod, axis=1), np.std(c_prod, axis=1)]).T
+
             self.ets_max = np.max(
                 np.vstack((self.ets_max, np.abs((c_prod - np.tile(self.ets_zscore[l_index_prev:l_index_next, 0], (self.T, 1)).T) /
                                                 np.tile(self.ets_zscore[l_index_prev:l_index_next, 1], (self.T, 1)).T))), axis=0)
@@ -192,7 +200,6 @@ class simplicial_complex_mvts():
         # triplets_max -> is a vector 1xT containing the maximum between all the z-scored observed at each time point across all triplets
         # To decrease the RAM usage, the product is done in batches of size < N*(N-1)
         for i in range(self.num_ROI):
-            #
             # print(i,l_index_prev,l_index_next)
             c_prod = self.raw_data[u[l_index_prev:l_index_next]] * \
                 self.raw_data[v[l_index_prev:l_index_next]] * \
@@ -210,12 +217,13 @@ class simplicial_complex_mvts():
         self.triplets_indexes = dict(zip(np.arange(N_triplets), indices))
 
     # Function that, for a specific time t, computes the maximum between edges and triplets
-    # This is used to replace the infty term after computing the persistence diagram
+    # This is used to replace the infinity term after computing the persistence diagram
     def find_max_weight(self, t):
         edges_abs_max = self.ets_max[t]
         triplets_abs_max = self.triplets_max[t]
         m = np.max([edges_abs_max, triplets_abs_max])
         return(m)
+
 
     # Function that remaps the weight of a k-order products using the pure coherence rule.
     def correction_for_coherence(self, current_list_sign, current_weight):
@@ -238,8 +246,7 @@ class simplicial_complex_mvts():
 
         # Finds the maximum weight among all edges and triplets for this time step.
         # It will be assigned to all the nodes (i.e. nodes enter at the same instant)
-        m_weight = np.max([np.ceil(self.triplets_max[t_current]), np.ceil(
-            self.ets_max[t_current])])
+        m_weight = np.max([np.ceil(self.triplets_max[t_current]), np.ceil(self.ets_max[t_current])])
         # Adding all the nodes from the beginning with the same weights
         for i in range(self.num_ROI):
             list_simplices.append(([i], m_weight))
@@ -247,15 +254,17 @@ class simplicial_complex_mvts():
         # Adding the edges:
         # Also, modify the signs of the weights to correct the z-score so that: if the edge signal is fully coherent, then assign a positive sign, otherwise negative
         for i in self.ets_indexes:
+            # Set the current edge indexes
             indexes_ij = self.ets_indexes[i]
+            # Retrieve the mean and std for the current edge
             c_mean = self.ets_zscore[i][0]
             c_std = self.ets_zscore[i][1]
-            weight_current = (self.raw_data[indexes_ij[0]][t_current]
-                              * self.raw_data[indexes_ij[1]][t_current] - c_mean) / c_std
-            list_of_signs = [self.raw_data[indexes_ij[0]]
-                             [t_current], self.raw_data[indexes_ij[1]][t_current]]
-            weight_current_corrected = self.correction_for_coherence(
-                list_of_signs, weight_current)
+            # Compute the weight of the current edge = z-score
+            weight_current = (self.raw_data[indexes_ij[0]][t_current]* self.raw_data[indexes_ij[1]][t_current]
+                              - c_mean) / c_std
+            list_of_signs = [self.raw_data[indexes_ij[0]][t_current], self.raw_data[indexes_ij[1]][t_current]]
+            # Correct the weight according to the coherence rule
+            weight_current_corrected = self.correction_for_coherence(list_of_signs, weight_current)
             list_simplices.append((indexes_ij, weight_current_corrected))
 
         # Adding the triplets
@@ -272,8 +281,8 @@ class simplicial_complex_mvts():
                 list_of_signs, weight_current)
             list_simplices.append((indexes_ijk, weight_current_corrected))
 
-        list_simplices_for_filtration, list_violations, percentage_of_triangles_discarded = self.fix_violations(
-            list_simplices, t_current)
+        list_simplices_for_filtration, list_violations, percentage_of_triangles_discarded = (
+            self.fix_violations(list_simplices, t_current))
         return(list_simplices_for_filtration, list_violations, percentage_of_triangles_discarded)
 
 
@@ -303,6 +312,7 @@ class simplicial_complex_mvts():
             # If the current simplex is an edge or a node, then I will immediately include it
             if len(simplices) <= 2:
                 list_simplices_for_filtration.append((simplices, -weight))
+                # Register the simplices included in the filtration
                 set_simplices.add(tuple(simplices))
                 counter += 1
             else:
@@ -337,7 +347,7 @@ class simplicial_complex_mvts():
         return(list_simplices_for_filtration, list_violating_triangles, hyper_coherence)
 
 
-# Function that checks for the pure coherence rule (1 if it is fully coheren, -1 otherwise)
+# Function that checks for the pure coherence rule (1 if it is fully coherent, -1 otherwise)
 def coherence_function(vector):
     n = len(vector)
     temp = 0
