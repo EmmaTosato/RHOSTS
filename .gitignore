@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+
+# PyCharm
+.idea/
+
+# Cache varie
+.jython_cache/
+.DS_Store
+
+# Librerie locali
+phat/
