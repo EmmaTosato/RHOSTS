@@ -3,6 +3,7 @@ from multiprocessing import Pool
 import h5py
 import os
 
+
 ## Create the structure containing all the edges and triplets for every time t
 def create_simplicial_framework_from_data(data, null_model_flag):
     global ts_simplicial
