@@ -1,5 +1,5 @@
 #!/bin/sh
-### Launch the code for the times 0-5 and using 5 cores 
+### Launch the code for the times t1-t2 and using 5 cores
 ### and save the magnitude of the projected violating triangles \Delta_v at the level of edges
 ### on the file "edges_projection.hd5"
 
@@ -8,10 +8,10 @@
 ##different libraries (it is computationally expensive)
 cd ../High_order_TS_with_scaffold/
 codepath="simplicial_multivariate.py"
-filename="./../Kaneko_CLM/subject1_left.txt"
+filename="./../input/subject1_left.txt"
 javaplexpath="javaplex/"
-python ${codepath} ${filename} -t 0 5 -p 5 -j ${javaplexpath} scaffold_
-mv scaffold_gen/ ../Sample_results/
+python ${codepath} ${filename} -t 0 3 -p 5 -j ${javaplexpath} scaffold_
+mv scaffold_generators/ ../output/
 cd ../Example/
 
 

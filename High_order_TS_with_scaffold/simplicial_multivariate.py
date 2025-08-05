@@ -13,7 +13,6 @@ def create_simplicial_framework_from_data(data, null_model_flag, folder_javaplex
         data, null_model_flag, folder_javaplex, scaffold_outdir)
     # return(ts_simplicial)
 
-
 # This function allows to save on .hd5 file the list of violating triangles when projected at the level of edges.
 # Moreover, it saves on the standard output several global quantities (line 32):
 # Time; Hyper complexity indic.; Hyper complexity FC; Hyper complexity CT;
@@ -31,7 +30,6 @@ def handle_output(result):
             "{0}".format(current_time), (m, n), dtype='f', data=c_values)
         f2.close()
     print(" ".join([str(el) for el in result[:-1]]))
-
 
 ##Launch the bulk of the code for a single time point
 def launch_code_one_t(t):
@@ -62,14 +60,11 @@ def launch_code_one_t(t):
 
     # Since the signs of the persistence diagram are flipped,
     # then Fully Coherent contributes identify points with birth and death <=0
-    dgms1_complexity_FC = dgms1_clean[(
-                                              dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
+    dgms1_complexity_FC = dgms1_clean[(dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
     # Coherent Transition contributes identify points with birth < 0 and death > 0
-    dgms1_complexity_CT = dgms1_clean[(
-                                              dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
+    dgms1_complexity_CT = dgms1_clean[(dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
     # Fully Decoherence contributes identify points with birth > 0 and death > 0
-    dgms1_complexity_FD = dgms1_clean[(
-                                              dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
+    dgms1_complexity_FD = dgms1_clean[(dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
 
     # Computing the Wasserstein distances
     complexity_FC = persim.sliced_wasserstein(
@@ -95,7 +90,6 @@ def launch_code_one_t(t):
                complexity_FD, hyper_coherence, avg_edge_violation, edge_weights]
 
     return (results)
-
 
 
 ############# MAIN CODE #############

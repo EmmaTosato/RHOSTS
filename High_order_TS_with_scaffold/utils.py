@@ -174,7 +174,6 @@ class simplicial_complex_mvts():
         for i in range(self.num_ROI):
             c_prod = self.raw_data[u[l_index_prev:l_index_next]
                                    ] * self.raw_data[v[l_index_prev:l_index_next]]
-            print(f"Shape: {c_prod.shape}")
             self.ets_zscore[l_index_prev:l_index_next] = np.array(
                 [np.mean(c_prod, axis=1), np.std(c_prod, axis=1)]).T
             self.ets_max = np.max(
@@ -372,11 +371,10 @@ class simplicial_complex_mvts():
 
         # Fraction of positive triangle discarderd (a.k.a. the hyper coherence)
         hyper_coherence = (1.0 * violation_triangles) / \
-            (triangles_count + violation_triangles)
+                          (triangles_count + violation_triangles)
         list_simplices_scaffold_all = dict(list_simplices_scaffold_all)
 
         return(list_simplices_for_filtration, list_violating_triangles, hyper_coherence, list_simplices_scaffold_all)
-
 
 # Function that checks for the pure coherence rule (1 if it is fully coheren, -1 otherwise)
 def coherence_function(vector):
@@ -422,7 +420,6 @@ def compute_edgeweight(list_violations, num_ROI):
                 edge_weight[edgeID] = [weight, 1.0]
     return(edge_weight)
 
-## Todo
 def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='home/andrea/javaplex/lib/',
                      save_generators=True, verbose=False, python_persistenthomologypath='persistent_homology_calculation.py'):
     '''
@@ -436,10 +433,10 @@ def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output
     three edges and a triangle:
     {'[0]':['0','1.5'],'[1]':['0','1.5'],'[2]':['0','1.5'],'[0,2]':['1','2.5'],'[0,1]':['2','3.2'],
      '[1, 2]':['3','3.5'], '[0,1,2]':['4','5.0']]}
-    The parameter dimension represents the homology group '''
+    The parameter dimension represents the homology group
+    '''
 
     # Check that the persistent homology python scripts exists in the current directory:
-    # print(os.path.exists(python_persistenthomologypath))
     if os.path.exists(python_persistenthomologypath) == False:
         sys.stderr.write("File {0} is not present in the current directory. I cannot launch the scaffold code! Skipping...\n".format(
             python_persistenthomologypath))
@@ -454,3 +451,4 @@ def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output
         grep_stdout = s.communicate(input=Clique_dictionary.encode('utf-8'))[0]
         if verbose == True:
             print(grep_stdout.decode())
+
