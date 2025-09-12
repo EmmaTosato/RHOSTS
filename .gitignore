@@ -13,3 +13,6 @@ input
 
 # Output
 output
+*.class
+Notebooks/.ipynb_checkpoints/
+*.hd5
