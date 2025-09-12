@@ -13,6 +13,11 @@ input
 
 # Output
 output
+
+# Other
 *.class
 Notebooks/.ipynb_checkpoints/
 *.hd5
+
+# Esternal
+External
