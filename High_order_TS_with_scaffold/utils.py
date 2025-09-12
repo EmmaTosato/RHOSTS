@@ -420,8 +420,9 @@ def compute_edgeweight(list_violations, num_ROI):
                 edge_weight[edgeID] = [weight, 1.0]
     return(edge_weight)
 
-def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='home/andrea/javaplex/lib/',
-                     save_generators=True, verbose=False, python_persistenthomologypath='persistent_homology_calculation.py'):
+
+def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='/home/andrea/javaplex/lib/',
+                     save_generators=True, verbose=False, python_persistenthomologypath='persistent_homology_calculation.py', time = 0):
     '''
     Function that calls the jython code to compute the scaffold.
     It requires a valid filtration "clique_dic_file", which is piped as an input string for the jython code
@@ -433,10 +434,10 @@ def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output
     three edges and a triangle:
     {'[0]':['0','1.5'],'[1]':['0','1.5'],'[2]':['0','1.5'],'[0,2]':['1','2.5'],'[0,1]':['2','3.2'],
      '[1, 2]':['3','3.5'], '[0,1,2]':['4','5.0']]}
-    The parameter dimension represents the homology group
-    '''
+    The parameter dimension represents the homology group '''
 
     # Check that the persistent homology python scripts exists in the current directory:
+    # print(os.path.exists(python_persistenthomologypath))
     if os.path.exists(python_persistenthomologypath) == False:
         sys.stderr.write("File {0} is not present in the current directory. I cannot launch the scaffold code! Skipping...\n".format(
             python_persistenthomologypath))
@@ -449,6 +450,12 @@ def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output
 
         # Here I'm piping the dictionary as input string for the jython code
         grep_stdout = s.communicate(input=Clique_dictionary.encode('utf-8'))[0]
+
+        if s.returncode != 0:
+            print(f"[ERROR scaffold {tag_name_output}] returncode={s.returncode}\n{grep_stdout}")
+        else:
+            if verbose:
+                print(grep_stdout)
+
         if verbose == True:
             print(grep_stdout.decode())
-

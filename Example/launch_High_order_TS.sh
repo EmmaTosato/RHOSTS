@@ -5,4 +5,4 @@ filename="./../input/subject1_left.txt"
 weighted_network="./../output/sub1_left_weighted"
 result_file="./../output/subject1_left_results.txt"
 
-python ${codepath} ${filename} -t 0 5 -p 5 > ${result_file}
+python ${codepath} ${filename} -t 0 1200 -p 10 > ${result_file}

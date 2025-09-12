@@ -53,7 +53,7 @@ def launch_code_one_t(t):
     if ts_simplicial.javaplex_path != False:
         compute_scaffold(list_filtration_scaffold, dimension=1, directory=ts_simplicial.scaffold_outdir,
                          tag_name_output='_{0}'.format(t),
-                         javaplex_path=ts_simplicial.javaplex_path, save_generators=True, verbose=False)
+                         javaplex_path=ts_simplicial.javaplex_path, save_generators=True, verbose=False, time = t)
 
     # Computing the hyper-complexity indicator as the Wasserstein distance with the empty space
     hyper_complexity = persim.sliced_wasserstein(dgms1_clean, np.array([]))

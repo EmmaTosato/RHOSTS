@@ -6,12 +6,14 @@
 
 ##The code needs to be launched from the directory "High_order_TS_with_scaffold" in order to include the
 ##different libraries (it is computationally expensive)
-cd ../High_order_TS_with_scaffold/
+cd ../High_order_TS_with_scaffold/                                    # So we enter the folder
+
 codepath="simplicial_multivariate.py"
 filename="./../input/subject1_left.txt"
 javaplexpath="javaplex/"
-python ${codepath} ${filename} -t 0 3 -p 5 -j ${javaplexpath} scaffold_
-mv scaffold_generators/ ../output/
+
+python ${codepath} ${filename} -t 1 4 -p 5 -j ${javaplexpath} scaffold2_
+mv scaffold2_gen/ ../output/
 cd ../Example/
 
 

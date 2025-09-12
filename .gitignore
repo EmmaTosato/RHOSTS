@@ -8,3 +8,8 @@ __pycache__/
 .jython_cache/
 .DS_Store
 
+# Input
+input
+
+# Output
+output

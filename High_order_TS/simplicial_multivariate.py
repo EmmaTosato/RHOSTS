@@ -49,25 +49,18 @@ def launch_code_one_t(t):
 
     # Since the signs of the persistence diagram are flipped,
     # then Fully Coherent contributes identify points with birth and death <=0
-    dgms1_complexity_FC = dgms1_clean[(
-        dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
+    dgms1_complexity_FC = dgms1_clean[(dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] <= 0)]
     # Coherent Transition contributes identify points with birth < 0 and death > 0
-    dgms1_complexity_CT = dgms1_clean[(
-        dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
+    dgms1_complexity_CT = dgms1_clean[(dgms1_clean[:, 0] < 0) & (dgms1_clean[:, 1] > 0)]
     # Fully Decoherence contributes identify points with birth > 0 and death > 0
-    dgms1_complexity_FD = dgms1_clean[(
-        dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
+    dgms1_complexity_FD = dgms1_clean[( dgms1_clean[:, 0] > 0) & (dgms1_clean[:, 1] > 0)]
 
     # Computing the Wasserstein distances
-    complexity_FC = persim.sliced_wasserstein(
-        dgms1_complexity_FC, np.array([]))
-    complexity_CT = persim.sliced_wasserstein(
-        dgms1_complexity_CT, np.array([]))
-    complexity_FD = persim.sliced_wasserstein(
-        dgms1_complexity_FD, np.array([]))
+    complexity_FC = persim.sliced_wasserstein(dgms1_complexity_FC, np.array([]))
+    complexity_CT = persim.sliced_wasserstein(dgms1_complexity_CT, np.array([]))
+    complexity_FD = persim.sliced_wasserstein(dgms1_complexity_FD, np.array([]))
 
-    flag_violations_list = np.array(
-        list_violation_fully_coherence, dtype="object")[:, 2]
+    flag_violations_list = np.array(list_violation_fully_coherence, dtype="object")[:, 2]
     # Average edge violation
     avg_edge_violation = np.mean(flag_violations_list)
 
