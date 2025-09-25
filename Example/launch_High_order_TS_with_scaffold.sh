@@ -10,9 +10,14 @@ cd ../High_order_TS_with_scaffold/                                    # So we en
 
 codepath="simplicial_multivariate.py"
 filename="./../input/subject1_left.txt"
-javaplexpath="javaplex/"
+javaplexpath="javaplex/javaplex.jar"   # <--- FILE .jar, non la cartella!
+outdir="scaffold2_"
 
-python ${codepath} ${filename} -t 1 4 -p 5 -j ${javaplexpath} scaffold2_
+# (facoltativo ma consigliato) più RAM per la JVM
+export _JAVA_OPTIONS="-Xms2g -Xmx16g"
+
+python ${codepath} ${filename} -t 0 1200 -p 1 -j ${javaplexpath} ${outdir}
+
 mv scaffold2_gen/ ../output/
 cd ../Example/
 

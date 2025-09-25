@@ -421,8 +421,16 @@ def compute_edgeweight(list_violations, num_ROI):
     return(edge_weight)
 
 
-def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output='_0', javaplex_path='/home/andrea/javaplex/lib/',
-                     save_generators=True, verbose=False, python_persistenthomologypath='persistent_homology_calculation.py', time = 0):
+def compute_scaffold(
+    clique_dic_file,
+    dimension,
+    directory='./',
+    tag_name_output='_0',
+    javaplex_path='/home/$USER/RHOSTS/High_order_TS_with_scaffold/javaplex/javaplex.jar',
+    save_generators=True,
+    verbose=False,
+    python_persistenthomologypath='persistent_homology_calculation.py'
+):
     '''
     Function that calls the jython code to compute the scaffold.
     It requires a valid filtration "clique_dic_file", which is piped as an input string for the jython code
@@ -438,24 +446,61 @@ def compute_scaffold(clique_dic_file, dimension, directory='./', tag_name_output
 
     # Check that the persistent homology python scripts exists in the current directory:
     # print(os.path.exists(python_persistenthomologypath))
-    if os.path.exists(python_persistenthomologypath) == False:
-        sys.stderr.write("File {0} is not present in the current directory. I cannot launch the scaffold code! Skipping...\n".format(
-            python_persistenthomologypath))
+    eff_javaplex = javaplex_path or os.environ.get("JAVAPLEX_JAR", "")
+    eff_javaplex = os.path.expanduser(os.path.expandvars(str(eff_javaplex)))
+    if os.path.isdir(eff_javaplex):
+        cand = os.path.join(eff_javaplex, "javaplex.jar")
+        if os.path.exists(cand):
+            eff_javaplex = cand
+    if not os.path.isfile(eff_javaplex):
+        sys.stderr.write("[scaffold] ERROR: javaplex jar non trovato: {}\n".format(eff_javaplex))
+        return 1
+
+    if not os.path.exists(python_persistenthomologypath):
+        sys.stderr.write(
+            "File {} non presente. Skipping scaffold...\n".format(python_persistenthomologypath)
+        )
+        return 1
+
+    # --- prep input + cmd ---
+    Clique_dictionary = str(clique_dic_file)
+
+    # jython + classpath + heap + headless
+    args = [
+        "jython",
+        "-J-cp", eff_javaplex,
+        "-J-Xms2g", "-J-Xmx16g",
+        "-J-Djava.awt.headless=true",
+        "-J-XX:+UseG1GC",
+        python_persistenthomologypath
+    ]
+    # positional args expected by persistent_homology_calculation.py
+    for opt in [dimension, directory, tag_name_output, eff_javaplex, save_generators]:
+        args.append(str(opt))
+
+    try:
+        proc = subprocess.Popen(args, stdout=PIPE, stderr=STDOUT, stdin=PIPE)
+        out = proc.communicate(input=Clique_dictionary.encode("utf-8"))[0]
+        rc = proc.returncode
+    except FileNotFoundError:
+        sys.stderr.write("ERROR: 'jython' non trovato nel PATH.\n")
+        return 1
+    except Exception as e:
+        sys.stderr.write("Errore nel lancio di Jython: {}\n".format(e))
+        return 1
+
+    if rc != 0:
+        sys.stderr.write("[ERROR scaffold {}] returncode={}.\n".format(tag_name_output, rc))
+        if verbose and out:
+            try:
+                sys.stderr.write(out.decode("utf-8", errors="ignore") + "\n")
+            except Exception:
+                pass
     else:
-        Clique_dictionary = str(clique_dic_file)
-        args = ["jython", python_persistenthomologypath]
-        for opt in [dimension, directory, tag_name_output, javaplex_path, save_generators]:
-            args.extend([str(opt)])
-        s = subprocess.Popen(args, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        if verbose and out:
+            try:
+                print(out.decode("utf-8", errors="ignore"))
+            except Exception:
+                pass
 
-        # Here I'm piping the dictionary as input string for the jython code
-        grep_stdout = s.communicate(input=Clique_dictionary.encode('utf-8'))[0]
-
-        if s.returncode != 0:
-            print(f"[ERROR scaffold {tag_name_output}] returncode={s.returncode}\n{grep_stdout}")
-        else:
-            if verbose:
-                print(grep_stdout)
-
-        if verbose == True:
-            print(grep_stdout.decode())
+    return rc

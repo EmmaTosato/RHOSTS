@@ -2,6 +2,9 @@ from utils import *
 from multiprocessing import Pool
 import h5py
 import os
+from utils import *
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PH_SCRIPT = os.path.join(SCRIPT_DIR, "persistent_homology_calculation.py")
 
 
 ## Create the structure containing all the edges and triplets for every time t
@@ -51,9 +54,16 @@ def launch_code_one_t(t):
     # If flag is activated, compute the scaffold and save the list of generators on file
     # The function below uses jython (and the corresponding code: persistent_homology_calculation.py)
     if ts_simplicial.javaplex_path != False:
-        compute_scaffold(list_filtration_scaffold, dimension=1, directory=ts_simplicial.scaffold_outdir,
-                         tag_name_output='_{0}'.format(t),
-                         javaplex_path=ts_simplicial.javaplex_path, save_generators=True, verbose=False, time = t)
+        compute_scaffold(
+            list_filtration_scaffold,
+            dimension=1,
+            directory=ts_simplicial.scaffold_outdir,
+            tag_name_output='_{0}'.format(t),
+            javaplex_path=ts_simplicial.javaplex_path,  # deve essere il .jar!
+            save_generators=True,
+            verbose=True,
+            python_persistenthomologypath=PH_SCRIPT  # <--- questa riga
+        )
 
     # Computing the hyper-complexity indicator as the Wasserstein distance with the empty space
     hyper_complexity = persim.sliced_wasserstein(dgms1_clean, np.array([]))
