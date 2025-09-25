@@ -19,5 +19,5 @@ output
 Notebooks/.ipynb_checkpoints/
 *.hd5
 
-# Esternal
-External
+# External Libraries
+External/jython-2.7.4
