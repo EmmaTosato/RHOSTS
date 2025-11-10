@@ -8,17 +8,12 @@ __pycache__/
 .jython_cache/
 .DS_Store
 
-# Input
-input
-
 # Output
 output
 High_order_TS_with_scaffold/scaffold_
 
 # Other
-*.class
 Notebooks/.ipynb_checkpoints/
-*.hd5
 
 # External Libraries
 External/jython-2.7.4
