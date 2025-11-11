@@ -29,8 +29,8 @@ def list2simplexes(list, dim):
 # print('This code needs as input:');
 # print('1) full filtration data',clique_dic_file)
 # print('2) the maximum homology dimension to calculate',dimension)
-# print('3) the directory name for output',Dir)
-# print('4) the tag name for the output files',stringie)
+# print('3) the directory name for Output',Dir)
+# print('4) the tag name for the Output files',stringie)
 # print('6) the full path to your javaplex directory',javaplex_path)
 
 
@@ -146,8 +146,8 @@ for h in range(1, dimension + 1):
             float(test[0]))], edge_weights[int(float(test[1]))])
         Generator_dictionary[h].append(tempcycle)
         del tempcycle
-    for cycle in Generator_dictionary[h]:
-        cycle.summary()
+    #for cycle in Generator_dictionary[h]:
+        #cycle.summary()
 
     # For printing summary
     """

@@ -469,7 +469,48 @@ def compute_scaffold(
         args.extend([str(opt)])
     s = subprocess.Popen(args, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 
-    # Here I'm piping the dictionary as input string for the jython code
     grep_stdout = s.communicate(input=Clique_dictionary.encode('utf-8'))[0]
     if verbose == True:
             print(grep_stdout.decode())
+            # --- prep input + cmd ---
+    Clique_dictionary = str(clique_dic_file)
+
+    # jython + classpath + heap + headless
+    args = [
+        "jython",
+        "-J-cp", eff_javaplex,
+        "-J-Xms2g", "-J-Xmx16g",
+        "-J-Djava.awt.headless=true",
+        "-J-XX:+UseG1GC",
+        python_persistenthomologypath
+    ]
+    # positional args expected by persistent_homology_calculation.py
+    for opt in [dimension, directory, tag_name_output, eff_javaplex, save_generators]:
+        args.append(str(opt))
+
+    try:
+        proc = subprocess.Popen(args, stdout=PIPE, stderr=STDOUT, stdin=PIPE)
+        out = proc.communicate(input=Clique_dictionary.encode("utf-8"))[0]
+        rc = proc.returncode
+    except FileNotFoundError:
+        sys.stderr.write("ERROR: 'jython' non trovato nel PATH.\n")
+        return 1
+    except Exception as e:
+        sys.stderr.write("Errore nel lancio di Jython: {}\n".format(e))
+        return 1
+
+    if rc != 0:
+        sys.stderr.write("[ERROR scaffold {}] returncode={}.\n".format(tag_name_output, rc))
+        if verbose and out:
+            try:
+                sys.stderr.write(out.decode("utf-8", errors="ignore") + "\n")
+            except Exception:
+                pass
+    else:
+        if verbose and out:
+            try:
+                print(out.decode("utf-8", errors="ignore"))
+            except Exception:
+                pass
+
+    return rc

@@ -1,4 +1,12 @@
 #!/bin/sh
+#SBATCH --mail-type=ALL
+#SBATCH --time=1-00:00:00
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=32G
+#SBATCH -p brains
+#SBATCH --output=/data/etosato/RHOSTS/Logs/scaffold_%j.out
+#SBATCH --error=/data/etosato/RHOSTS/Logs/scaffold_%j.err
+
 ### Launch the code for the times t1-t2 and using 5 cores
 ### and save the magnitude of the projected violating triangles \Delta_v at the level of edges
 ### on the file "edges_projection.hd5"
@@ -9,12 +17,12 @@
 cd ../High_order_TS_with_scaffold/
 
 codepath="simplicial_multivariate.py"
-filename="./../input/subject1_left.txt"
+filename="./../Input/subject1_left.txt"
 javaplexpath="javaplex/javaplex.jar"
 
 python ${codepath} ${filename} -t 0 2 -p 1 -j ${javaplexpath} scaffold_
 
-mv scaffold_gen/ ../output/
+mv scaffold_gen/ ../Output/
 cd /data/etosato/RHOSTS/Example
 
 

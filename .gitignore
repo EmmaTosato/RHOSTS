@@ -9,11 +9,11 @@ __pycache__/
 .DS_Store
 
 # Output
-output
+Output
 High_order_TS_with_scaffold/scaffold
 
 # Other
 Notebooks/.ipynb_checkpoints/
 
 # External Libraries
-external/
+External/
