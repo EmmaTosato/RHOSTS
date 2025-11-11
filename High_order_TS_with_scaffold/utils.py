@@ -474,7 +474,8 @@ def compute_scaffold(
         "-J-XX:+UseG1GC",
         python_persistenthomologypath
     ]
-    # positional args expected by persistent_homology_calculation.py
+    
+    # Positional args expected by persistent_homology_calculation.py
     for opt in [dimension, directory, tag_name_output, eff_javaplex, save_generators]:
         args.append(str(opt))
 
