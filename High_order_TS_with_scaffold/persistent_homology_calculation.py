@@ -111,7 +111,7 @@ annotated_intervals = pH.computeAnnotatedIntervals(Complex)
 
 # # Here we save the full generator dictionary and save the interval files in order to be
 # # able to reopen them later for other purposes, for example comparison of random and null
-# # models..
+# # models.
 
 
 gendir = Dir + 'gen'
@@ -146,10 +146,12 @@ for h in range(1, dimension + 1):
             float(test[0]))], edge_weights[int(float(test[1]))])
         Generator_dictionary[h].append(tempcycle)
         del tempcycle
-    #for cycle in Generator_dictionary[h]:
-        #cycle.summary()
-    import io
+    for cycle in Generator_dictionary[h]:
+        cycle.summary()
 
+    # For printing summary
+    """
+    import io
     summary_path = os.path.join(gendir, 'generators_summary_{0}_{1}.txt'.format(h, stringie))
     with io.open(summary_path, 'w', encoding='utf-8') as fh:
         for cycle in Generator_dictionary[h]:
@@ -159,7 +161,7 @@ for h in range(1, dimension + 1):
             for deh in cycle.composition:
                 fh.write(u" {0}\n".format(deh))
             fh.write(u"\n")
-
+    """
 
 filename = os.path.join(gendir, 'generators_' + str(stringie) + '.pck')
 generator_dict_file = open(filename, 'w')
