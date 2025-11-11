@@ -12,9 +12,6 @@ codepath="simplicial_multivariate.py"
 filename="./../input/subject1_left.txt"
 javaplexpath="javaplex/javaplex.jar"
 
-# (facoltativo ma consigliato) più RAM per la JVM
-export _JAVA_OPTIONS="-Xms2g -Xmx16g"
-
 python ${codepath} ${filename} -t 0 2 -p 1 -j ${javaplexpath} scaffold_
 
 mv scaffold_gen/ ../output/
