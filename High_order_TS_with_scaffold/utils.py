@@ -464,16 +464,6 @@ def compute_scaffold(
 
     # --- Prep input + cmd ---
     Clique_dictionary = str(clique_dic_file)
-    args = ["jython", python_persistenthomologypath]
-    for opt in [dimension, directory, tag_name_output, javaplex_path, save_generators]:
-        args.extend([str(opt)])
-    s = subprocess.Popen(args, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-
-    grep_stdout = s.communicate(input=Clique_dictionary.encode('utf-8'))[0]
-    if verbose == True:
-            print(grep_stdout.decode())
-            # --- prep input + cmd ---
-    Clique_dictionary = str(clique_dic_file)
 
     # jython + classpath + heap + headless
     args = [
