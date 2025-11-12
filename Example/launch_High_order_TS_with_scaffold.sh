@@ -1,30 +1,53 @@
 #!/bin/sh
-#SBATCH --mail-type=ALL
-#SBATCH --time=1-00:00:00
-#SBATCH --cpus-per-task=10
-#SBATCH --mem=32G
+#SBATCH -J scaffold_brains
 #SBATCH -p brains
-#SBATCH --output=/data/etosato/RHOSTS/Logs/scaffold_%j.out
-#SBATCH --error=/data/etosato/RHOSTS/Logs/scaffold_%j.err
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=20G
+#SBATCH -t 1-00:00:00
+#SBATCH --array=51-1199%8
+#SBATCH -o /data/etosato/RHOSTS/Logs/%x_%A_%a.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/%x_%A_%a.err
 
-### Launch the code for the times t1-t2 and using 5 cores
-### and save the magnitude of the projected violating triangles \Delta_v at the level of edges
-### on the file "edges_projection.hd5"
+set -euo pipefail
 
+# Limiti memoria JVM
+export JAVA_TOOL_OPTIONS="-Xms2G -Xmx16G"
 
-##The code needs to be launched from the directory "High_order_TS_with_scaffold" in order to include the
-##different libraries (it is computationally expensive)
+# Dir di lavoro richiesto dalla pipeline
 cd ../High_order_TS_with_scaffold/
 
 codepath="simplicial_multivariate.py"
 filename="./../Input/subject1_left.txt"
 javaplexpath="javaplex/javaplex.jar"
+outtag="scaffold_"   # prefisso output (come negli esempi originali)
 
-python ${codepath} ${filename} -t 0 2 -p 1 -j ${javaplexpath} scaffold_
+# Tempo corrente dell'array
+t=${SLURM_ARRAY_TASK_ID}
+tnext=$((t+1))
 
-mv scaffold_gen/ ../Output/
+# Assicura cartelle output esistano
+mkdir -p ../Output/generators1200
+mkdir -p ../Example
+
+echo "---- Starting scaffold for t=${t} ----"
+date
+
+# Esecuzione: una JVM per job -> -p 1
+if python "${codepath}" "${filename}" -t "${t}" "${tnext}" -p 1 -j "${javaplexpath}" "${outtag}"; then
+  # Sposta SOLO il file generato da questo t per evitare race conditions
+  if [ -f scaffold_gen/generators__${t}.pck ]; then
+    mv "scaffold_gen/generators__${t}.pck" ../Output/
+  fi
+else
+  # Append con lock per evitare scritture concorrenti
+  {
+    flock -w 10 9 || true
+    echo "${t}" >&9
+  } 9>> ../Example/fails.txt
+fi
+
+echo "---- Finished scaffold for t=${t} ----"
+date
+
+# Torna alla cartella Example (non spostiamo la cartella intera per evitare conflitti tra task)
 cd /data/etosato/RHOSTS/Example
-
-
-### Alternatively, you can run directly this code in the correponding folder:
-## python simplicial_multivariate.py ../Kaneko_CLM/trial_N50_T240_r175_eps012_008_03_0068_005.txt_kaneko -t 0 5 -p 5 -j javaplex trial_
