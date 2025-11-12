@@ -8,8 +8,9 @@ __pycache__/
 .jython_cache/
 .DS_Store
 
-# Output
+# Output and Logs
 Output
+Logs
 High_order_TS_with_scaffold/scaffold
 
 # Other
