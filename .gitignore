@@ -9,12 +9,12 @@ __pycache__/
 .DS_Store
 
 # Output
-output
+Output
 High_order_TS_with_scaffold/scaffold_
 
 # Other
 Notebooks/.ipynb_checkpoints/
 
-# external Libraries
-external/jython-2.7.4
-external
+# External Libraries
+External/jython-2.7.4
+External

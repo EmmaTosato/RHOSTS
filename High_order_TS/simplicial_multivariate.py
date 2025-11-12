@@ -12,7 +12,7 @@ def create_simplicial_framework_from_data(data, null_model_flag):
     # return(ts_simplicial)
 
 # This function allows to save on .hd5 file the list of violating triangles when projected at the level of edges.
-# Moreover, it saves on the standard output several global quantities (line 30):
+# Moreover, it saves on the standard Output several global quantities (line 30):
 # Time; Hyper complexity indic.; Hyper complexity FC; Hyper complexity CT;
 # Hyper complexity FD; Hyper coherence; Average edge violation
 def handle_output(result):
@@ -70,7 +70,7 @@ def launch_code_one_t(t):
     edge_weights = compute_edgeweight(list_violation_fully_coherence, n_ROI)
 
     # Report the results in a vector and print everything
-    # (except the downward projections) on standard output
+    # (except the downward projections) on standard Output
     results = [t, hyper_complexity, complexity_FC, complexity_CT,
                complexity_FD, hyper_coherence, avg_edge_violation, edge_weights]
 
@@ -94,7 +94,7 @@ if len(sys.argv) <= 1:
         "**                                                                          **\n"
         "**                     ----   Optional Variables  ----                      **\n"
         "**                                                                          **\n"
-        "**    <-t t0 T> restricts the output of the higher-order indicators         **\n"
+        "**    <-t t0 T> restricts the Output of the higher-order indicators         **\n"
         "**                  only for the time interval [t0,T]                       **\n"
         "**                                                                          **\n"
         "**   <-p #core> represents the number of cores used for the computation of  **\n"

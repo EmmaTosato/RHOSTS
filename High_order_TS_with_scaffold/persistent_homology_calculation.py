@@ -29,8 +29,8 @@ def list2simplexes(list, dim):
 # print('This code needs as input:');
 # print('1) full filtration data',clique_dic_file)
 # print('2) the maximum homology dimension to calculate',dimension)
-# print('3) the directory name for output',Dir)
-# print('4) the tag name for the output files',stringie)
+# print('3) the directory name for Output',Dir)
+# print('4) the tag name for the Output files',stringie)
 # print('6) the full path to your javaplex directory',javaplex_path)
 
 

@@ -18,7 +18,7 @@ export _JAVA_OPTIONS="-Xms2g -Xmx16g"
 
 python ${codepath} ${filename} -t 0 1200 -p 1 -j ${javaplexpath} ${outdir}
 
-mv scaffold2_gen/ ../output/
+mv scaffold2_gen/ ../Output/
 cd ../Example/
 
 
