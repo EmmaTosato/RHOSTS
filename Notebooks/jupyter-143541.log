@@ -107,3 +107,23 @@ SyntaxError: Unexpected token {
 [I 2025-11-12 17:27:51.644 ServerApp] Saving file at /Notebooks/Example_brain_data.ipynb
 [W 2025-11-12 17:27:51.648 ServerApp] Notebook Notebooks/Example_brain_data.ipynb is not trusted
 [I 2025-11-12 17:31:50.942 ServerApp] Creating new directory in /Output
+[I 2025-11-12 18:18:43.193 ServerApp] Starting buffering for f99322ce-9626-45ef-8f5c-51d0a1e938d7:e3c9e0e9-0090-4879-88ba-35ae4fff3f92
+[I 2025-11-12 18:18:43.195 ServerApp] Starting buffering for 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6:6a940a87-4777-4193-aa33-239f3fc801e1
+[I 2025-11-12 18:18:44.281 ServerApp] Connecting to kernel 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6.
+[I 2025-11-12 18:18:44.445 ServerApp] Connecting to kernel f99322ce-9626-45ef-8f5c-51d0a1e938d7.
+[I 2025-11-12 18:18:44.526 ServerApp] Starting buffering for 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6:16089d06-175d-4dea-8aa6-7c95f923ba82
+[W 2025-11-12 18:18:44.579 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2025-11-12 18:18:44.655 ServerApp] Starting buffering for f99322ce-9626-45ef-8f5c-51d0a1e938d7:1e4e6bcc-4972-4913-b22a-e1d1a499003b
+[W 2025-11-12 18:18:45.066 ServerApp] Notebook Notebooks/Example_brain_data.ipynb is not trusted
+[I 2025-11-12 18:18:47.412 ServerApp] Connecting to kernel 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6.
+[I 2025-11-12 18:18:47.804 ServerApp] Connecting to kernel f99322ce-9626-45ef-8f5c-51d0a1e938d7.
+[I 2025-11-12 18:57:16.786 ServerApp] Saving file at /Notebooks/Example_brain_data.ipynb
+[W 2025-11-12 18:57:16.787 ServerApp] Notebook Notebooks/Example_brain_data.ipynb is not trusted
+[I 2025-11-12 19:02:03.202 ServerApp] Starting buffering for 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6:da1f844e-e152-47f9-8e05-4fc5013c2065
+[I 2025-11-12 19:02:03.219 ServerApp] Starting buffering for f99322ce-9626-45ef-8f5c-51d0a1e938d7:2a15f446-5e01-4e5e-84d6-108d7f28018b
+slurmstepd-brain02: error: *** JOB 143541 ON brain02 CANCELLED AT 2025-11-12T19:04:02 ***
+[C 2025-11-12 19:04:02.555 ServerApp] received signal 15, stopping
+[I 2025-11-12 19:04:02.560 ServerApp] Shutting down 5 extensions
+[I 2025-11-12 19:04:02.562 ServerApp] Shutting down 2 kernels
+[I 2025-11-12 19:04:02.563 ServerApp] Kernel shutdown: f99322ce-9626-45ef-8f5c-51d0a1e938d7
+[I 2025-11-12 19:04:02.564 ServerApp] Kernel shutdown: 30d143f8-4d2d-45c8-a8ec-7759aa00c8a6
