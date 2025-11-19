@@ -1,0 +1,54 @@
+MAGIC_NODE: brain02
+MAGIC_PORT: 53573
+MAGIC_DIR : /data/etosato/RHOSTS
+MAGIC_INFO: Starting Jupyter...
+Fail to get yarn configuration. /home/etosato/miniconda3/envs/rhosts/lib/python3.8/site-packages/jupyterlab/staging/yarn.js:4
+(()=>{var Qge=Object.create;var AS=Object.defineProperty;var bge=Object.getOwnPropertyDescriptor;var Sge=Object.getOwnPropertyNames;var vge=Object.getPrototypeOf,xge=Object.prototype.hasOwnProperty;var J=(r=>typeof require<"u"?require:typeof Proxy<"u"?new Proxy(r,{get:(e,t)=>(typeof require<"u"?require:e)[t]}):r)(function(r){if(typeof require<"u")return require.apply(this,arguments);throw new Error('Dynamic require of "'+r+'" is not supported')});var Pge=(r,e)=>()=>(r&&(e=r(r=0)),e);var w=(r,e)=>()=>(e||r((e={exports:{}}).exports,e),e.exports),ut=(r,e)=>{for(var t in e)AS(r,t,{get:e[t],enumerable:!0})},Dge=(r,e,t,i)=>{if(e&&typeof e=="object"||typeof e=="function")for(let n of Sge(e))!xge.call(r,n)&&n!==t&&AS(r,n,{get:()=>e[n],enumerable:!(i=bge(e,n))||i.enumerable});return r};var Pe=(r,e,t)=>(t=r!=null?Qge(vge(r)):{},Dge(e||!r||!r.__esModule?AS(t,"default",{value:r,enumerable:!0}):t,r));var QK=w((GXe,BK)=>{BK.expo
+
+SyntaxError: Unexpected token {
+    at createScript (vm.js:80:10)
+    at Object.runInThisContext (vm.js:139:10)
+    at Module._compile (module.js:616:28)
+    at Object.Module._extensions..js (module.js:663:10)
+    at Module.load (module.js:565:32)
+    at tryModuleLoad (module.js:505:12)
+    at Function.Module._load (module.js:497:3)
+    at Function.Module.runMain (module.js:693:10)
+    at startup (bootstrap_node.js:188:16)
+    at bootstrap_node.js:609:3
+
+[I 2025-11-19 15:08:48.359 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2025-11-19 15:08:48.364 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2025-11-19 15:08:48.368 ServerApp] jupyterlab | extension was successfully linked.
+[I 2025-11-19 15:08:48.372 ServerApp] notebook | extension was successfully linked.
+[I 2025-11-19 15:08:48.772 ServerApp] notebook_shim | extension was successfully linked.
+[I 2025-11-19 15:08:48.819 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2025-11-19 15:08:48.822 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2025-11-19 15:08:48.823 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2025-11-19 15:08:48.828 LabApp] JupyterLab extension loaded from /home/etosato/miniconda3/envs/rhosts/lib/python3.8/site-packages/jupyterlab
+[I 2025-11-19 15:08:48.828 LabApp] JupyterLab application directory is /home/etosato/miniconda3/envs/rhosts/share/jupyter/lab
+[I 2025-11-19 15:08:48.829 LabApp] Extension Manager is 'pypi'.
+[I 2025-11-19 15:08:48.843 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2025-11-19 15:08:48.848 ServerApp] notebook | extension was successfully loaded.
+[I 2025-11-19 15:08:48.849 ServerApp] Serving notebooks from local directory: /data/etosato/RHOSTS
+[I 2025-11-19 15:08:48.849 ServerApp] Jupyter Server 2.14.2 is running at:
+[I 2025-11-19 15:08:48.849 ServerApp] http://brain02:53573/lab?token=6cbfc26924c312127e9fa2bd77f83e1fbb3c67257ccbf62b
+[I 2025-11-19 15:08:48.849 ServerApp]     http://127.0.0.1:53573/lab?token=6cbfc26924c312127e9fa2bd77f83e1fbb3c67257ccbf62b
+[I 2025-11-19 15:08:48.849 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2025-11-19 15:08:48.875 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/etosato/.local/share/jupyter/runtime/jpserver-65458-open.html
+    Or copy and paste one of these URLs:
+        http://brain02:53573/lab?token=6cbfc26924c312127e9fa2bd77f83e1fbb3c67257ccbf62b
+        http://127.0.0.1:53573/lab?token=6cbfc26924c312127e9fa2bd77f83e1fbb3c67257ccbf62b
+[I 2025-11-19 15:08:49.067 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2025-11-19 15:09:22.722 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2025-11-19 15:09:22.977 ServerApp] Notebook Notebooks/Example_brain_data.ipynb is not trusted
+[I 2025-11-19 15:09:23.338 ServerApp] Kernel started: 4a82214e-8bd2-4178-b8c3-11c08bddc3b5
+[I 2025-11-19 15:09:23.445 ServerApp] Kernel started: ef6c1160-69bd-4183-9a52-a73268a2c19d
+[I 2025-11-19 15:09:24.367 ServerApp] Connecting to kernel 4a82214e-8bd2-4178-b8c3-11c08bddc3b5.
+[I 2025-11-19 15:09:24.370 ServerApp] Connecting to kernel 4a82214e-8bd2-4178-b8c3-11c08bddc3b5.
+[I 2025-11-19 15:09:24.423 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
+[I 2025-11-19 15:09:24.425 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
+[I 2025-11-19 15:09:24.456 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
