@@ -8,17 +8,43 @@ from neuromaps.datasets import fetch_fslr
 from neuromaps.transforms import mni152_to_fslr
 from brainspace.datasets import load_parcellation
 import matplotlib.ticker as ticker
+from matplotlib import font_manager as fm
 
 import os
 import numpy as np
 import svgutils.transform as sg
 import copy
+import warnings
+
+
+PREFERRED_FONT = "PT Serif Caption"
+FALLBACK_FONT = "DejaVu Serif"
+
+
+def _pick_font_family(preferred=PREFERRED_FONT, fallback=FALLBACK_FONT):
+    """Return a font name available in the current matplotlib installation."""
+    available_fonts = {f.name for f in fm.fontManager.ttflist}
+    if preferred in available_fonts:
+        return preferred
+
+    warnings.warn(
+        (
+            f"Matplotlib font '{preferred}' is not installed."
+            f" Falling back to '{fallback}'."
+            " Install the PT Serif family to reproduce the original figures."
+        ),
+        stacklevel=2,
+    )
+    return fallback
+
+
+_FONT_FAMILY = _pick_font_family()
 
 
 def plot_adjustments(ax=False, ticks_width=1.5, axis_width=2.5):
     if ax == False:
         ax = plt.gca()
-    plt.rcParams['font.family'] = "PT Serif Caption"
+    plt.rcParams['font.family'] = _FONT_FAMILY
     plt.rcParams['xtick.major.width'] = ticks_width
     plt.rcParams['ytick.major.width'] = ticks_width
     plt.rcParams['axes.linewidth'] = ticks_width
