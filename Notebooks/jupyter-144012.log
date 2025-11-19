@@ -52,3 +52,21 @@ SyntaxError: Unexpected token {
 [I 2025-11-19 15:09:24.423 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
 [I 2025-11-19 15:09:24.425 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
 [I 2025-11-19 15:09:24.456 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
+[I 2025-11-19 15:23:06.965 ServerApp] Starting buffering for 4a82214e-8bd2-4178-b8c3-11c08bddc3b5:353662f2-505b-49e8-a4d6-7bd48030e2fd
+[I 2025-11-19 15:23:06.966 ServerApp] Starting buffering for ef6c1160-69bd-4183-9a52-a73268a2c19d:2999eeb3-08c0-4c78-8811-8b5b0fbf7e68
+[I 2025-11-19 15:23:06.986 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
+[I 2025-11-19 15:23:06.986 ServerApp] Restoring connection for ef6c1160-69bd-4183-9a52-a73268a2c19d:2999eeb3-08c0-4c78-8811-8b5b0fbf7e68
+[I 2025-11-19 15:23:07.032 ServerApp] Connecting to kernel 4a82214e-8bd2-4178-b8c3-11c08bddc3b5.
+[I 2025-11-19 15:23:07.032 ServerApp] Restoring connection for 4a82214e-8bd2-4178-b8c3-11c08bddc3b5:353662f2-505b-49e8-a4d6-7bd48030e2fd
+[W 2025-11-19 15:24:36.988 ServerApp] WebSocket ping timeout after 90001 ms.
+[W 2025-11-19 15:24:37.033 ServerApp] WebSocket ping timeout after 90000 ms.
+[I 2025-11-19 15:24:41.993 ServerApp] Starting buffering for ef6c1160-69bd-4183-9a52-a73268a2c19d:2999eeb3-08c0-4c78-8811-8b5b0fbf7e68
+[I 2025-11-19 15:24:42.034 ServerApp] Starting buffering for 4a82214e-8bd2-4178-b8c3-11c08bddc3b5:353662f2-505b-49e8-a4d6-7bd48030e2fd
+[I 2025-11-19 15:55:09.308 ServerApp] Connecting to kernel 4a82214e-8bd2-4178-b8c3-11c08bddc3b5.
+[I 2025-11-19 15:55:09.353 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
+[I 2025-11-19 15:55:09.383 ServerApp] Starting buffering for ef6c1160-69bd-4183-9a52-a73268a2c19d:52248986-1aff-4f8a-bac6-316ee3119ed7
+[I 2025-11-19 15:55:09.432 ServerApp] Starting buffering for 4a82214e-8bd2-4178-b8c3-11c08bddc3b5:ec88df1b-281b-48fe-8734-5b723712b8a5
+[W 2025-11-19 15:55:09.698 ServerApp] Notebook Notebooks/Example_brain_data.ipynb is not trusted
+[W 2025-11-19 15:55:09.721 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2025-11-19 15:55:09.837 ServerApp] Connecting to kernel 4a82214e-8bd2-4178-b8c3-11c08bddc3b5.
+[I 2025-11-19 15:55:09.943 ServerApp] Connecting to kernel ef6c1160-69bd-4183-9a52-a73268a2c19d.
