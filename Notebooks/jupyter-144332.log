@@ -1,0 +1,91 @@
+MAGIC_NODE: brain02
+MAGIC_PORT: 35633
+MAGIC_DIR : /data/etosato/RHOSTS
+MAGIC_INFO: Starting Jupyter...
+Fail to get yarn configuration. /home/etosato/miniconda3/envs/rhosts/lib/python3.8/site-packages/jupyterlab/staging/yarn.js:4
+(()=>{var Qge=Object.create;var AS=Object.defineProperty;var bge=Object.getOwnPropertyDescriptor;var Sge=Object.getOwnPropertyNames;var vge=Object.getPrototypeOf,xge=Object.prototype.hasOwnProperty;var J=(r=>typeof require<"u"?require:typeof Proxy<"u"?new Proxy(r,{get:(e,t)=>(typeof require<"u"?require:e)[t]}):r)(function(r){if(typeof require<"u")return require.apply(this,arguments);throw new Error('Dynamic require of "'+r+'" is not supported')});var Pge=(r,e)=>()=>(r&&(e=r(r=0)),e);var w=(r,e)=>()=>(e||r((e={exports:{}}).exports,e),e.exports),ut=(r,e)=>{for(var t in e)AS(r,t,{get:e[t],enumerable:!0})},Dge=(r,e,t,i)=>{if(e&&typeof e=="object"||typeof e=="function")for(let n of Sge(e))!xge.call(r,n)&&n!==t&&AS(r,n,{get:()=>e[n],enumerable:!(i=bge(e,n))||i.enumerable});return r};var Pe=(r,e,t)=>(t=r!=null?Qge(vge(r)):{},Dge(e||!r||!r.__esModule?AS(t,"default",{value:r,enumerable:!0}):t,r));var QK=w((GXe,BK)=>{BK.expo
+
+SyntaxError: Unexpected token {
+    at createScript (vm.js:80:10)
+    at Object.runInThisContext (vm.js:139:10)
+    at Module._compile (module.js:616:28)
+    at Object.Module._extensions..js (module.js:663:10)
+    at Module.load (module.js:565:32)
+    at tryModuleLoad (module.js:505:12)
+    at Function.Module._load (module.js:497:3)
+    at Function.Module.runMain (module.js:693:10)
+    at startup (bootstrap_node.js:188:16)
+    at bootstrap_node.js:609:3
+
+[I 2025-11-24 11:02:00.033 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2025-11-24 11:02:00.037 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2025-11-24 11:02:00.041 ServerApp] jupyterlab | extension was successfully linked.
+[I 2025-11-24 11:02:00.044 ServerApp] notebook | extension was successfully linked.
+[I 2025-11-24 11:02:00.570 ServerApp] notebook_shim | extension was successfully linked.
+[I 2025-11-24 11:02:00.628 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2025-11-24 11:02:00.630 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2025-11-24 11:02:00.631 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2025-11-24 11:02:00.637 LabApp] JupyterLab extension loaded from /home/etosato/miniconda3/envs/rhosts/lib/python3.8/site-packages/jupyterlab
+[I 2025-11-24 11:02:00.637 LabApp] JupyterLab application directory is /home/etosato/miniconda3/envs/rhosts/share/jupyter/lab
+[I 2025-11-24 11:02:00.638 LabApp] Extension Manager is 'pypi'.
+[I 2025-11-24 11:02:00.650 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2025-11-24 11:02:00.655 ServerApp] notebook | extension was successfully loaded.
+[I 2025-11-24 11:02:00.656 ServerApp] Serving notebooks from local directory: /data/etosato/RHOSTS
+[I 2025-11-24 11:02:00.656 ServerApp] Jupyter Server 2.14.2 is running at:
+[I 2025-11-24 11:02:00.656 ServerApp] http://brain02:35633/lab?token=31c3ffa90e9a7b8a3971089eb01de22f624412d4be583a2c
+[I 2025-11-24 11:02:00.656 ServerApp]     http://127.0.0.1:35633/lab?token=31c3ffa90e9a7b8a3971089eb01de22f624412d4be583a2c
+[I 2025-11-24 11:02:00.656 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2025-11-24 11:02:00.675 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/etosato/.local/share/jupyter/runtime/jpserver-29612-open.html
+    Or copy and paste one of these URLs:
+        http://brain02:35633/lab?token=31c3ffa90e9a7b8a3971089eb01de22f624412d4be583a2c
+        http://127.0.0.1:35633/lab?token=31c3ffa90e9a7b8a3971089eb01de22f624412d4be583a2c
+[I 2025-11-24 11:02:00.863 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2025-11-24 11:02:17.311 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2025-11-24 11:02:17.432 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 11:02:17.595 ServerApp] Kernel started: a7fa9380-93d9-4854-a3c1-eab1911622e5
+[I 2025-11-24 11:02:18.587 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 11:02:18.590 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 11:02:18.614 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 11:13:09.082 ServerApp] Uploading file to /Preprocessing/human.roi.nii.gz
+[W 2025-11-24 11:13:36.008 ServerApp] delete /Preprocessing/preprocessing-144059.log
+[I 2025-11-24 11:14:17.490 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 11:14:17.492 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 11:14:50.271 ServerApp] Uploading file to /Preprocessing/BrainSeg.nii.gz
+[I 2025-11-24 11:14:50.324 ServerApp] Saving file at /Preprocessing/BrainSeg.nii.gz
+[I 2025-11-24 11:16:18.413 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 11:16:18.415 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 11:45:48.408 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 11:45:48.409 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 11:46:21.203 ServerApp] Uploading file to /Preprocessing/Tian_Subcortex_S1_3T.nii
+[I 2025-11-24 11:46:21.703 ServerApp] Saving file at /Preprocessing/Tian_Subcortex_S1_3T.nii
+[I 2025-11-24 11:47:48.488 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 11:47:48.489 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 11:49:48.577 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 11:49:48.578 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:08:48.423 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:08:48.425 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:10:48.510 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:10:48.511 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:12:49.405 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:12:49.406 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:16:49.483 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:16:49.485 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:18:49.583 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:18:49.584 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:20:49.663 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:20:49.664 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:22:49.751 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:22:49.752 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:24:49.833 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:24:49.835 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:26:49.911 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:26:49.913 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:28:50.001 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:28:50.003 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:30:50.085 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:30:50.087 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:32:50.154 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:32:50.155 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
