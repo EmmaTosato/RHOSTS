@@ -89,3 +89,36 @@ SyntaxError: Unexpected token {
 [W 2025-11-24 12:30:50.087 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
 [I 2025-11-24 12:32:50.154 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
 [W 2025-11-24 12:32:50.155 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:37:27.897 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:b7036046-ec2c-4ac0-9bee-edf1c4d39ec7
+[I 2025-11-24 12:37:28.548 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 12:37:28.660 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:13e8d785-476f-4196-beaa-4e685cabc9b5
+[W 2025-11-24 12:37:28.819 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[W 2025-11-24 12:37:28.869 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2025-11-24 12:37:28.954 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 12:39:28.857 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:39:28.858 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:41:28.922 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:41:28.923 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 12:43:29.421 ServerApp] Saving file at /Preprocessing/data_preparation.ipynb
+[W 2025-11-24 12:43:29.422 ServerApp] Notebook Preprocessing/data_preparation.ipynb is not trusted
+[I 2025-11-24 13:45:13.936 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[I 2025-11-24 13:45:13.955 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 13:45:13.955 ServerApp] Restoring connection for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[W 2025-11-24 13:46:43.958 ServerApp] WebSocket ping timeout after 90002 ms.
+[I 2025-11-24 13:46:48.962 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[I 2025-11-24 13:47:21.084 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 13:47:21.084 ServerApp] Restoring connection for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[W 2025-11-24 13:49:51.085 ServerApp] WebSocket ping timeout after 119992 ms.
+[I 2025-11-24 13:49:56.089 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[I 2025-11-24 13:59:36.358 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 13:59:36.359 ServerApp] Restoring connection for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[W 2025-11-24 14:02:06.359 ServerApp] WebSocket ping timeout after 119992 ms.
+[I 2025-11-24 14:02:11.364 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[I 2025-11-24 14:09:02.953 ServerApp] Connecting to kernel a7fa9380-93d9-4854-a3c1-eab1911622e5.
+[I 2025-11-24 14:09:02.954 ServerApp] Restoring connection for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+[I 2025-11-24 14:42:59.010 ServerApp] Starting buffering for a7fa9380-93d9-4854-a3c1-eab1911622e5:2070ea7f-554c-4da3-924f-4ec0c0bfd5f2
+slurmstepd-brain02: error: *** JOB 144332 ON brain02 CANCELLED AT 2025-11-24T14:43:13 ***
+[C 2025-11-24 14:43:13.239 ServerApp] received signal 15, stopping
+[I 2025-11-24 14:43:13.243 ServerApp] Shutting down 5 extensions
+[I 2025-11-24 14:43:13.244 ServerApp] Shutting down 1 kernel
+[I 2025-11-24 14:43:13.246 ServerApp] Kernel shutdown: a7fa9380-93d9-4854-a3c1-eab1911622e5
