@@ -4,16 +4,19 @@
 #SBATCH --cpus-per-task=5
 #SBATCH --mem=32G
 #SBATCH -t 1-00:00:00
-#SBATCH -o /data/etosato/RHOSTS/Logs/134829_edge.out
-#SBATCH -e /data/etosato/RHOSTS/Logs/134829_edge.err
-### Launch the code for the times t1-t2 and using 5 cores
-### and save the magnitude of the projected violating triangles \Delta_v at the level of edges
-### on the file "edges_projection.hd5"
+#SBATCH -o /data/etosato/RHOSTS/Logs/%A_%a_edge.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/%A_%a_edge.err
+
+### Subject list
+subjects=("393247" "745555" "905147" "943862")
+
+### Select subject based on SLURM_ARRAY_TASK_ID
+sub=${subjects[$SLURM_ARRAY_TASK_ID]}
 
 codepath="/data/etosato/RHOSTS/High_order_TS/simplicial_multivariate.py"
-filename="/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/134829_ts_zscore_ctx_sub.txt"
-weighted_network="/data/etosato/RHOSTS/Output/lorenzo_data/134829/134829_weighted_net"
-result_file="/data/etosato/RHOSTS/Output/lorenzo_data/134829/134829_indicators.txt"
+filename="/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/${sub}_ts_zscore_ctx_sub.txt"
+weighted_network="/data/etosato/RHOSTS/Output/lorenzo_data/${sub}/${sub}_weighted_net"
+result_file="/data/etosato/RHOSTS/Output/lorenzo_data/${sub}/${sub}_indicators.txt"
 
 # Create directories if they do not exist
 mkdir -p "$(dirname "$weighted_network")"
