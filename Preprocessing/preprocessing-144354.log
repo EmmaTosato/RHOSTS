@@ -1,0 +1,33 @@
+Cortical atlas shape:     (91, 109, 91)
+Subcortical atlas shape:  (91, 109, 91)
+
+Processing subject 134829:
+  /data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI/134829.nii.gz
+  fMRI shape: (91, 109, 91, 3600)
+  Output saved in: /data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/134829_ts_zscore_ctx_sub.txt
+  Final shape: (3600, 116)
+
+Processing subject 393247:
+  /data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI/393247.nii.gz
+  fMRI shape: (91, 109, 91, 3600)
+  Output saved in: /data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/393247_ts_zscore_ctx_sub.txt
+  Final shape: (3600, 116)
+
+Processing subject 745555:
+  /data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI/745555.nii.gz
+  fMRI shape: (91, 109, 91, 3600)
+  Output saved in: /data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/745555_ts_zscore_ctx_sub.txt
+  Final shape: (3600, 116)
+
+Processing subject 905147:
+  /data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI/905147.nii.gz
+  fMRI shape: (91, 109, 91, 3600)
+  Output saved in: /data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/905147_ts_zscore_ctx_sub.txt
+  Final shape: (3600, 116)
+
+Processing subject 943862:
+  /data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI/943862.nii.gz
+  fMRI shape: (91, 109, 91, 3600)
+  Output saved in: /data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/943862_ts_zscore_ctx_sub.txt
+  Final shape: (3600, 116)
+Done.
