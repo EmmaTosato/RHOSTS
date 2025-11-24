@@ -56,36 +56,49 @@ def main():
     ids = ["134829", "393247", "745555", "905147", "943862"]
 
     # Paths
-    base = "/data/etosato/RHOSTS/lorenzo_data/HCP_rsfMRI"                       # folder with .nii.gz files
-    atlas_path = "/Preprocessing/cortex_100.nii.gz"  # 3D atlas
-    n_rois = 100
+    base = "/data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI"
+    cortex_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/cortex_100.nii.gz"
+    sub_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/subcortex_16.nii"
+
+    # ROIs for the cortical atlas and the subcortical one
+    n_rois_ctx = 100
+    n_rois_sub = 16
 
     # Output directory for ROI time series
-    output_dir = "/Input/lorenzo_data/ts_txt"
+    output_dir = "/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical"
     os.makedirs(output_dir, exist_ok=True)
 
     # Load atlas once
-    atlas = nib.load(atlas_path).get_fdata()
-    print(f"Atlas shape: {atlas.shape}")
+    cortex_atlas = nib.load(cortex_atlas_path).get_fdata().astype(int)
+    sub_atlas    = nib.load(sub_atlas_path).get_fdata().astype(int)
+
+    print("Cortical atlas shape:    ", cortex_atlas.shape)
+    print("Subcortical atlas shape: ", sub_atlas.shape)
 
     # Loop over subjects
     for s_id in ids:
         fmri_path = os.path.join(base, f"{s_id}.nii.gz")
-        print(f"Processing subject {s_id} from {fmri_path}")
+        print(f"\nProcessing subject {s_id}:\n  {fmri_path}")
 
-        fmri_data = nib.load(fmri_path).get_fdata()  # (X, Y, Z, T)
-        print(f"  fMRI shape: {fmri_data.shape}")
+        fmri_data = nib.load(fmri_path).get_fdata()
+        print("  fMRI shape:", fmri_data.shape)
 
-        # Extract ROI-averaged time series: (T, n_rois)
-        ts = compute_roi_timeseries(fmri_data, atlas, n_rois)
+        # Extract cortex time series (T × 100)
+        ts_ctx = compute_roi_timeseries(fmri_data, cortex_atlas, n_rois_ctx)
+        # Extract subcortical time series (T × 16)
+        ts_sub = compute_roi_timeseries(fmri_data, sub_atlas, n_rois_sub)
+        
+        # Concatenate → (T × 116)
+        ts_all = np.concatenate([ts_ctx, ts_sub], axis=1)
 
         # Z-score per ROI (column-wise: time dimension = axis 0)
-        ts_z = zscore(ts, axis=0, nan_policy="omit")
+        ts_all_z = zscore(ts_all, axis=0, nan_policy="omit")
 
         # Save as txt: T rows, n_rois columns
-        out_path = os.path.join(output_dir, f"{s_id}_ts_zscore.txt")
-        np.savetxt(out_path, ts_z, fmt="%.6f")
-        print(f"  Saved: {out_path} with shape {ts_z.shape}")
+        out_path = os.path.join(output_dir, f"{s_id}_ts_zscore_ctx_sub.txt")
+        np.savetxt(out_path, ts_all_z, fmt="%.6f")
+        print(f"  Output saved in: {out_path}")
+        print(f"  Final shape: {ts_all_z.shape}")
 
     print("Done.")
 
