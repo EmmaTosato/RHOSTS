@@ -1,7 +1,10 @@
+"""Helpers to load dynamic violation data and compute nodal strength."""
+
 import numpy as np
 import h5py
 
 def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
+    """Convert violating triangle descriptors into per-node strength estimates."""
     edge_weights = {}
 
     # Iterate over each violating triangle
@@ -36,6 +39,7 @@ def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
 
 
 def load_single_frame_dv(hd5_file, frame, num_ROIs):
+    """Load one DV frame from an HDF5 file and compute nodal strength."""
     with h5py.File(hd5_file, "r") as f:
         if str(frame) not in f:
             raise KeyError(f"Frame {frame} not found in {hd5_file}")

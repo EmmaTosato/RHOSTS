@@ -1,9 +1,12 @@
+"""Scaffold-based nodal strength helpers."""
+
 import numpy as np
 import networkx as nx
 import pickle as pk
 import os
 
 def load_scaffold_singletime(directory, single_time, hom_group=1):
+    """Load a single scaffold graph from disk and construct a weighted NetworkX graph."""
     path = os.path.join(directory, f"generators__{single_time}.pck")
 
     if not os.path.exists(path):
@@ -26,6 +29,8 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
             f"hom_group={hom_group} missing or malformed in scaffold pickle {path}"
         ) from exc
 
+    # Each cycle contributes weighted edges; accumulate weights when multiple
+    # cycles share the same undirected edge.
     for cycle in cycles:
         w = float(cycle.persistence_interval())
         for e in cycle.cycles():
@@ -38,6 +43,7 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
 
 
 def compute_nodal_strength_scaffold(G, num_ROIs=100):
+    """Convert a scaffold graph into a nodal strength vector."""
     nodal = np.zeros(num_ROIs)
     for node, strength in G.degree(weight="weight"):
         if isinstance(node, int) and node < num_ROIs:
@@ -46,5 +52,6 @@ def compute_nodal_strength_scaffold(G, num_ROIs=100):
 
 
 def load_single_frame_scaffold(directory, frame, num_ROIs):
+    """Load and convert a single scaffold frame into nodal strengths."""
     G = load_scaffold_singletime(directory, frame)
     return compute_nodal_strength_scaffold(G, num_ROIs=num_ROIs)

@@ -1,3 +1,5 @@
+"""Helper utilities to select frames and aggregate nodal strengths."""
+
 import glob
 import os
 import warnings
@@ -166,7 +168,7 @@ def aggregate_frames(hd5_files, frames, loader_fn, num_ROIs):
     """
 
     total = np.zeros(num_ROIs, dtype=float)
-    count = 0
+    count = 0  # number of successfully processed subject/frame pairs
 
     for hd5_or_directory in hd5_files:
         for frame in frames:
@@ -188,6 +190,7 @@ def aggregate_frames(hd5_files, frames, loader_fn, num_ROIs):
                 )
                 continue
 
+            # Accumulate the nodal strength vector and track the number of samples
             total += strength
             count += 1
 

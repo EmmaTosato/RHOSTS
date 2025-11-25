@@ -1,8 +1,11 @@
+"""Command-line entry point for higher-order nodal strength computation."""
+
 import argparse
 import numpy as np
 from .maps.brain_map import compute_brainmap_dv, compute_brainmap_scaffold
 
 def parse_args():
+    """Define and parse CLI arguments for the brain map utilities."""
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=["dv", "scaffold"], required=True)
     p.add_argument(
@@ -41,8 +44,10 @@ def parse_args():
 
 
 def main():
+    """Dispatch to DV or scaffold pipeline and persist the resulting array."""
     args = parse_args()
 
+    # Choose the correct computation based on the input modality
     if args.mode == "dv":
         nodal = compute_brainmap_dv(
             hd5_paths=args.inputs,
@@ -66,6 +71,7 @@ def main():
             direction=args.direction,
         )
 
+    # Persist the numpy array for downstream analysis or visualization
     np.save(args.output_npy, nodal)
     print("Saved to", args.output_npy)
 
