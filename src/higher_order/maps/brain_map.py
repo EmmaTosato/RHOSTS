@@ -1,6 +1,6 @@
-from ..maps.frame_selection import select_frames
-from ..maps.aggregation import aggregate_frames
-from ..nodal_strength.nodal_strength_dv import load_single_frame_dv, load_single_frame_scaffold
+from .builders import select_frames, aggregate_frames
+from ..nodal_strenght.nodal_strenght_dv import load_single_frame_dv
+from ..nodal_strenght.nodal_strength_scaffold import load_single_frame_scaffold
 
 def compute_brainmap_dv(
     hd5_paths,

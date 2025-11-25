@@ -1,7 +1,6 @@
 import argparse
 import numpy as np
-from ..builders.dv_brainmap import compute_brainmap_dv
-from ..builders.scaffold_brainmap import compute_brainmap_scaffold
+from .maps.brain_map import compute_brainmap_dv, compute_brainmap_scaffold
 
 def parse_args():
     p = argparse.ArgumentParser()
