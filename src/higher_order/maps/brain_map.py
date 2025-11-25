@@ -1,3 +1,5 @@
+"""High-level orchestration for deriving brain maps from DV or scaffold data."""
+
 from .builders import select_frames, aggregate_frames
 from ..nodal_strenght.nodal_strenght_dv import load_single_frame_dv
 from ..nodal_strenght.nodal_strength_scaffold import load_single_frame_scaffold
@@ -12,6 +14,7 @@ def compute_brainmap_dv(
     metric="hyper",      # "hyper" or "complexity"
     direction="high",    # "high" (top) or "low" (bottom)
 ):
+    """Compute nodal strength for dynamic violation (DV) HDF5 inputs."""
     # Map the chosen metric to the correct column index in the sorted txt file
     if metric == "hyper":
         value_col = 5
@@ -57,6 +60,8 @@ def compute_brainmap_scaffold(
     metric="complexity",   # sensible default for scaffold workflows
     direction="low",       # default to the bottom 15%
 ):
+    """Compute nodal strength using scaffold directories and persistence cycles."""
+    # Allow callers to reuse the DV interface but map to scaffold-friendly defaults
     if metric == "hyper":
         value_col = 5
     elif metric == "complexity":
