@@ -21,7 +21,8 @@ def parse_args():
     p.add_argument("--sorted-output-txt", type=str)
     p.add_argument("--num-rois", type=int, default=100)
 
-    # Nuovi: metric e direction per gestire hyper vs complexity, high vs low
+    # Additional CLI flags to choose metric (hyper/coherence vs complexity)
+    # and whether to focus on high or low values when selecting frames
     p.add_argument(
         "--metric",
         choices=["hyper", "complexity"],

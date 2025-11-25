@@ -12,7 +12,7 @@ def compute_brainmap_dv(
     metric="hyper",      # "hyper" or "complexity"
     direction="high",    # "high" (top) or "low" (bottom)
 ):
-    # Mappa metric -> colonna del txt
+    # Map the chosen metric to the correct column index in the sorted txt file
     if metric == "hyper":
         value_col = 5
     elif metric == "complexity":
@@ -20,7 +20,7 @@ def compute_brainmap_dv(
     else:
         raise ValueError(f"Unknown metric: {metric!r}")
 
-    # Mappa direction -> ordine
+    # Map direction to the sorting order (descending = top values, ascending = bottom values)
     if direction == "high":
         order = "desc"
     elif direction == "low":
@@ -54,8 +54,8 @@ def compute_brainmap_scaffold(
     percent=0.15,
     sorted_output_txt=None,
     num_ROIs=100,
-    metric="complexity",   # default più sensato per scaffold
-    direction="low",       # bottom 15% di default
+    metric="complexity",   # sensible default for scaffold workflows
+    direction="low",       # default to the bottom 15%
 ):
     if metric == "hyper":
         value_col = 5

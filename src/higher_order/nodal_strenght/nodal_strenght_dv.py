@@ -4,29 +4,29 @@ import h5py
 def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
     edge_weights = {}
 
-    # Per ogni triangolo violante
+    # Iterate over each violating triangle
     for row in triangle_data:
-        # i due vertici che definiscono l’arco
+        # vertices that define the edge
         i, j = int(row[0]), int(row[1])
-        # la somma dei pesi dei triangoli (i,j,k) che includono quell’arco
+        # sum of the weights of triangles (i, j, k) that include this edge
         sum_w = row[2]
-        # quanti triangoli includono quell’arco
+        # how many triangles include this edge
         count = row[3]
-        # considera lo stesso arco (i,j) = (j,i)
+        # treat (i, j) as the same edge as (j, i)
         edge = tuple(sorted((i, j)))
         if count > 0:
-            # media dei pesi dei triangoli che contengono (i,j)
+            # average weight of the triangles that contain (i, j)
             w_ij = sum_w / count
-            # aggiungo l'arco al dizionario (ridondante)
+            # store the edge weight if it is not already present
             if edge not in edge_weights:
                 edge_weights[edge] = w_ij
 
-    # Inizializza la forza nodale per tutti i nodi
+    # Initialize nodal strength for every node
     nodal_strength = np.zeros(num_ROIs)
 
-    # Iterazione su ogni arco violante
+    # Accumulate nodal strength from each violating edge
     for (i, j), w_ij in edge_weights.items():
-        # Proietto il peso degli archi sui nodi
+        # Project edge weights onto the connected nodes
         if i < num_ROIs:
             nodal_strength[i] += w_ij
         if j < num_ROIs:
