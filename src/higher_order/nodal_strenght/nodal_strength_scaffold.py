@@ -20,8 +20,10 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
     except (OSError, pk.UnpicklingError, EOFError) as exc:
         raise RuntimeError(f"Failed to load scaffold pickle {path}: {exc}") from exc
 
+    # Graph initialization
     G = nx.Graph()
 
+    # 
     try:
         cycles = gen[hom_group]
     except (KeyError, TypeError) as exc:
