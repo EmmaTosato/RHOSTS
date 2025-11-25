@@ -5,9 +5,15 @@ import h5py
 
 def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
     """Convert violating triangle descriptors into per-node strength estimates."""
+    # ``triangle_data`` stores one row per edge (i, j) and encodes how many
+    # violating triangles contained that edge and the total weight accumulated
+    # across those triangles. Each row is expected to be shaped like:
+    #   [i, j, sum_w, count]
+    # where ``sum_w`` is the sum of weights for all triangles incident to (i, j)
+    # and ``count`` is the number of such triangles.
     edge_weights = {}
 
-    # Iterate over each violating triangle
+    # Iterate over each violating triangle-derived edge descriptor
     for row in triangle_data:
         # vertices that define the edge
         i, j = int(row[0]), int(row[1])
@@ -20,11 +26,13 @@ def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
         if count > 0:
             # average weight of the triangles that contain (i, j)
             w_ij = sum_w / count
-            # store the edge weight if it is not already present
+            # store the edge weight once so the nodal projection is applied only
+            # to unique undirected edges
             if edge not in edge_weights:
                 edge_weights[edge] = w_ij
 
-    # Initialize nodal strength for every node
+    # Initialize nodal strength for every node. Nodes not present in the edge
+    # list will keep a value of zero.
     nodal_strength = np.zeros(num_ROIs)
 
     # Accumulate nodal strength from each violating edge
@@ -41,6 +49,8 @@ def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
 def load_single_frame_dv(hd5_file, frame, num_ROIs):
     """Load one DV frame from an HDF5 file and compute nodal strength."""
     with h5py.File(hd5_file, "r") as f:
+        # DV files expose one dataset per frame, keyed by the frame index as a
+        # string (e.g., "37").
         if str(frame) not in f:
             raise KeyError(f"Frame {frame} not found in {hd5_file}")
         data = f[str(frame)][:]

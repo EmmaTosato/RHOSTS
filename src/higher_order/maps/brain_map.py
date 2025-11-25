@@ -15,6 +15,11 @@ def compute_brainmap_dv(
     direction="high",    # "high" (top) or "low" (bottom)
 ):
     """Compute nodal strength for dynamic violation (DV) HDF5 inputs."""
+    # Translate user-friendly options into the concrete column index and sort
+    # order expected by ``select_frames``.
+    # ``metric`` chooses the column (hyper-coherence vs complexity) and
+    # ``direction`` chooses whether we take top or bottom values from that
+    # column.
     # Map the chosen metric to the correct column index in the sorted txt file
     if metric == "hyper":
         value_col = 5
@@ -62,6 +67,7 @@ def compute_brainmap_scaffold(
 ):
     """Compute nodal strength using scaffold directories and persistence cycles."""
     # Allow callers to reuse the DV interface but map to scaffold-friendly defaults
+    # (complexity / low values) when selecting frames.
     if metric == "hyper":
         value_col = 5
     elif metric == "complexity":
