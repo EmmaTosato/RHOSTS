@@ -5,12 +5,28 @@ import os
 
 def load_scaffold_singletime(directory, single_time, hom_group=1):
     path = os.path.join(directory, f"generators__{single_time}.pck")
-    with open(path, "rb") as f:
-        gen = pk.load(f)
+
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f"Scaffold file not found for frame {single_time}: {path}"
+        )
+
+    try:
+        with open(path, "rb") as f:
+            gen = pk.load(f)
+    except (OSError, pk.UnpicklingError, EOFError) as exc:
+        raise RuntimeError(f"Failed to load scaffold pickle {path}: {exc}") from exc
 
     G = nx.Graph()
 
-    for cycle in gen[hom_group]:
+    try:
+        cycles = gen[hom_group]
+    except (KeyError, TypeError) as exc:
+        raise RuntimeError(
+            f"hom_group={hom_group} missing or malformed in scaffold pickle {path}"
+        ) from exc
+
+    for cycle in cycles:
         w = float(cycle.persistence_interval())
         for e in cycle.cycles():
             u, v = int(e[0]), int(e[1])
