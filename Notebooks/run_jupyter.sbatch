@@ -3,7 +3,7 @@
 #SBATCH -p brains
 #SBATCH -t 04:00:00
 #SBATCH -c 4
-#SBATCH --mem=100G
+#SBATCH --mem=32G
 #SBATCH -o jupyter-%j.log
 
 # === Config ===
