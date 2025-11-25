@@ -2,9 +2,9 @@
 #SBATCH --job-name=jupyter
 #SBATCH -p brains
 #SBATCH -t 04:00:00
-#SBATCH -c 4
-#SBATCH --mem=32G
-#SBATCH -o jupyter-%j.log
+#SBATCH -c 8
+#SBATCH --mem=64G
+#SBATCH -o /data/etosato/RHOSTS/Logs/jupyter-%j.log
 
 # === Config ===
 ENV_NAME="rhosts"
