@@ -38,51 +38,53 @@ def select_frames(
     order="desc",
 ):
     """
-    Seleziona la lista di frame secondo lo scenario.
+    Select frame indices according to the chosen scenario.
 
     Parameters
     ----------
     hd5_files : list[str]
-        Lista di file HDF5 (o directory nel caso scaffold; nel caso scaffold i
-        frame vengono ricavati dai file ``generators__*.pck`` comuni a tutte le
-        directory).
+        List of HDF5 files (or directories for scaffold mode; when using
+        scaffold, frame numbers are inferred from ``generators__*.pck`` files
+        present in every directory).
     scenario : {"single_frame", "all_frames", "top_percent"}
-        Strategia di selezione.
+        Selection strategy.
     frame : int or None
-        Usato se scenario == "single_frame".
+        Used only when ``scenario == 'single_frame'``.
     percent : float
-        Percentuale (0–1) dei frame da selezionare nel caso "top_percent".
+        Fraction (0–1) of frames to keep when using the "top_percent" strategy.
     sorted_output_txt : str or None
-        File txt con timepoints e una metrica (es. hyper-coherence, complexity).
+        Text file containing timepoints and a metric (e.g., hyper-coherence or
+        complexity) sorted by value.
     value_col : int
-        Indice della colonna della metrica.
-        Esempi:
-        - 5 per hyper-coherence
-        - 1 per complexity
+        Column index for the metric in ``sorted_output_txt``.
+        Examples:
+        - 5 for hyper-coherence
+        - 1 for complexity
     order : {"desc", "asc"}
-        "desc" → top percento (valori alti)
-        "asc"  → bottom percento (valori bassi)
+        "desc" → take the highest values (top percent)
+        "asc"  → take the lowest values (bottom percent)
 
     Returns
     -------
-    list[int] : lista di frame selezionati.
+    list[int]
+        Selected frame indices.
     """
 
     if percent <= 0 or percent > 1:
         raise ValueError("percent must be in the interval (0, 1].")
 
-    # caso 1 — singolo frame
+    # case 1 — single frame
     if scenario == "single_frame":
         if frame is None:
             raise ValueError("frame required for scenario='single_frame'")
         return [frame]
 
-    # caso 2 — tutti i frame (solo per pipeline DV)
+    # case 2 — all frames (used in the DV pipeline)
     try:
         with h5py.File(hd5_files[0], "r") as f:
             all_frames = sorted(map(int, f.keys()))
     except (OSError, IsADirectoryError):
-        # nel caso scaffold, hd5_files[0] non è un hd5 → inferiamo dai file pck
+        # scaffold inputs are directories, so infer frames from the generator pickles
         per_directory_frames = [_list_scaffold_frames(d) for d in hd5_files]
         if scenario == "all_frames":
             if not all(per_directory_frames):
@@ -105,7 +107,7 @@ def select_frames(
             raise RuntimeError("Cannot infer frames for 'all_frames' from scaffold folders.")
         return all_frames
 
-    # caso 3 — top/bottom percento
+    # case 3 — top/bottom percentage of frames
     if scenario == "top_percent":
         if sorted_output_txt is None:
             raise ValueError("sorted_output_txt required for scenario='top_percent'")
@@ -126,9 +128,9 @@ def select_frames(
 
         n_top = int(np.ceil(len(timepoints) * percent))
 
-        if order == "desc":  # top percento (valori più ALTI)
+        if order == "desc":  # top percentage (highest values)
             idx = np.argsort(values)[-n_top:]
-        elif order == "asc":  # bottom percento (valori più BASSI)
+        elif order == "asc":  # bottom percentage (lowest values)
             idx = np.argsort(values)[:n_top]
         else:
             raise ValueError(f"Unknown order: {order!r}, use 'asc' or 'desc'.")
@@ -144,23 +146,24 @@ def select_frames(
 
 def aggregate_frames(hd5_files, frames, loader_fn, num_ROIs):
     """
-    Aggrega la nodal strength su soggetti × frame.
+    Aggregate nodal strength across subjects and frames.
 
     Parameters
     ----------
     hd5_files : list[str]
-        Path dei file hd5 (pipeline DV) o directory degli scaffold (pipeline H1).
+        Paths to hd5 files (DV pipeline) or scaffold directories (H1 pipeline).
     frames : list[int]
-        Frame selezionati.
+        Selected frame indices.
     loader_fn : callable
-        Funzione che carica un singolo frame e ritorna un vettore nodale:
-        loader_fn(hd5_or_dir, frame, num_ROIs) -> np.ndarray(num_ROIs,)
+        Function that loads a single frame and returns a nodal strength vector:
+        ``loader_fn(hd5_or_dir, frame, num_ROIs) -> np.ndarray(num_ROIs,)``
     num_ROIs : int
-        Numero di regioni.
+        Number of brain regions expected in the nodal vector.
 
     Returns
     -------
-    np.ndarray(num_ROIs,) : nodal strength media su soggetti × frame.
+    np.ndarray(num_ROIs,)
+        Mean nodal strength across all valid subjects and frames.
     """
 
     total = np.zeros(num_ROIs, dtype=float)
