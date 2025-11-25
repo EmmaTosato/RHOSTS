@@ -1,6 +1,6 @@
-from ..utils.frame_selection import select_frames
-from ..utils.aggregation import aggregate_frames
-from ..core.nodal_strength_dv import load_single_frame_dv
+from ..maps.frame_selection import select_frames
+from ..maps.aggregation import aggregate_frames
+from ..nodal_strength.nodal_strength_dv import load_single_frame_dv, load_single_frame_scaffold
 
 def compute_brainmap_dv(
     hd5_paths,
@@ -9,16 +9,43 @@ def compute_brainmap_dv(
     percent=0.15,
     sorted_output_txt=None,
     num_ROIs=100,
+    metric="hyper",      # "hyper" or "complexity"
+    direction="high",    # "high" (top) or "low" (bottom)
 ):
-    frames = select_frames(hd5_paths, scenario, frame, percent, sorted_output_txt)
+    # Mappa metric -> colonna del txt
+    if metric == "hyper":
+        value_col = 5
+    elif metric == "complexity":
+        value_col = 1
+    else:
+        raise ValueError(f"Unknown metric: {metric!r}")
+
+    # Mappa direction -> ordine
+    if direction == "high":
+        order = "desc"
+    elif direction == "low":
+        order = "asc"
+    else:
+        raise ValueError(f"Unknown direction: {direction!r}")
+
+    frames = select_frames(
+        hd5_files=hd5_paths,
+        scenario=scenario,
+        frame=frame,
+        percent=percent,
+        sorted_output_txt=sorted_output_txt,
+        value_col=value_col,
+        order=order,
+    )
+
     nodal_strength = aggregate_frames(
-        hd5_paths, frames, loader_fn=load_single_frame_dv, num_ROIs=num_ROIs
+        hd5_files=hd5_paths,
+        frames=frames,
+        loader_fn=load_single_frame_dv,
+        num_ROIs=num_ROIs,
     )
     return nodal_strength
 
-from ..utils.frame_selection import select_frames
-from ..utils.aggregation import aggregate_frames
-from ..core.nodal_strength_scaffold import load_single_frame_scaffold
 
 def compute_brainmap_scaffold(
     scaffold_directories,
@@ -27,9 +54,37 @@ def compute_brainmap_scaffold(
     percent=0.15,
     sorted_output_txt=None,
     num_ROIs=100,
+    metric="complexity",   # default più sensato per scaffold
+    direction="low",       # bottom 15% di default
 ):
-    frames = select_frames(scaffold_directories, scenario, frame, percent, sorted_output_txt)
+    if metric == "hyper":
+        value_col = 5
+    elif metric == "complexity":
+        value_col = 1
+    else:
+        raise ValueError(f"Unknown metric: {metric!r}")
+
+    if direction == "high":
+        order = "desc"
+    elif direction == "low":
+        order = "asc"
+    else:
+        raise ValueError(f"Unknown direction: {direction!r}")
+
+    frames = select_frames(
+        hd5_files=scaffold_directories,
+        scenario=scenario,
+        frame=frame,
+        percent=percent,
+        sorted_output_txt=sorted_output_txt,
+        value_col=value_col,
+        order=order,
+    )
+
     nodal_strength = aggregate_frames(
-        scaffold_directories, frames, loader_fn=load_single_frame_scaffold, num_ROIs=num_ROIs
+        hd5_files=scaffold_directories,
+        frames=frames,
+        loader_fn=load_single_frame_scaffold,
+        num_ROIs=num_ROIs,
     )
     return nodal_strength
