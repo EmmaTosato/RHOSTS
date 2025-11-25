@@ -9,7 +9,6 @@ import h5py
 # -----------------------------------------------------------------------------
 # FRAME SELECTION LOGIC
 # -----------------------------------------------------------------------------
-
 def _list_scaffold_frames(directory):
     """Return sorted frame indices inferred from ``generators__*.pck`` files."""
     pattern = os.path.join(directory, "generators__*.pck")
