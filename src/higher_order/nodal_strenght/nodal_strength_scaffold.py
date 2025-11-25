@@ -31,8 +31,11 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
             f"hom_group={hom_group} missing or malformed in scaffold pickle {path}"
         ) from exc
 
-    # Each cycle contributes weighted edges; accumulate weights when multiple
-    # cycles share the same undirected edge.
+    # Each persistence cycle corresponds to a collection of edges; the
+    # persistence interval is treated as the cycle weight and is added to every
+    # edge in that cycle. When multiple cycles traverse the same undirected
+    # edge, their weights accumulate, capturing how often an edge participates
+    # in the scaffold across generators.
     for cycle in cycles:
         w = float(cycle.persistence_interval())
         for e in cycle.cycles():
@@ -46,6 +49,8 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
 
 def compute_nodal_strength_scaffold(G, num_ROIs=100):
     """Convert a scaffold graph into a nodal strength vector."""
+    # Project weighted edges to node-level strength using NetworkX degree with
+    # the edge weights accumulated above.
     nodal = np.zeros(num_ROIs)
     for node, strength in G.degree(weight="weight"):
         if isinstance(node, int) and node < num_ROIs:

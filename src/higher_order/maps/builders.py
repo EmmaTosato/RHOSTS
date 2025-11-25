@@ -81,6 +81,9 @@ def select_frames(
         return [frame]
 
     # case 2 — all frames (used in the DV pipeline)
+    # We first attempt to open the first input as an HDF5 file (DV mode); if
+    # that fails, we are in scaffold mode and need to infer frames from
+    # ``generators__*.pck`` files present in every subject directory.
     try:
         with h5py.File(hd5_files[0], "r") as f:
             all_frames = sorted(map(int, f.keys()))
