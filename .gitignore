@@ -6,18 +6,24 @@ __pycache__/
 
 # Cache varie
 .jython_cache/
+
 .DS_Store
-
-# Output and Logs
-Output
-Logs
-High_order_TS_with_scaffold/scaffold
-
 # Other
 Notebooks/.ipynb_checkpoints/
 
+# Logs
+Logs
+
 # External Libraries
 External/
+
+
+## Heavy Data
+# Output
+Output
+
+# Intermediate output
+High_order_TS_with_scaffold/scaffold
 
 # lorenzo_data
 Preprocessing/HCP_rsfMRI
