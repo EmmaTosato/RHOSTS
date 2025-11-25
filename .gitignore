@@ -25,5 +25,5 @@ Output
 # Intermediate output
 High_order_TS_with_scaffold/scaffold
 
-# lorenzo_data
-Preprocessing/HCP_rsfMRI
+# Input before preprocessing
+Preprocessing/
