@@ -1,3 +1,7 @@
+import glob
+import os
+import warnings
+
 import numpy as np
 import h5py
 
@@ -6,14 +10,32 @@ import h5py
 # FRAME SELECTION LOGIC
 # -----------------------------------------------------------------------------
 
+def _list_scaffold_frames(directory):
+    """Return sorted frame indices inferred from ``generators__*.pck`` files."""
+    pattern = os.path.join(directory, "generators__*.pck")
+    frames = []
+    for path in glob.glob(pattern):
+        name = os.path.basename(path)
+        try:
+            frame_str = name.split("__", 1)[1].split(".pck", 1)[0]
+            frames.append(int(frame_str))
+        except (IndexError, ValueError):
+            warnings.warn(
+                f"Ignoring scaffold file with unexpected name: {name}",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+    return sorted(frames)
+
+
 def select_frames(
-        hd5_files,
-        scenario,
-        frame=None,
-        percent=0.15,
-        sorted_output_txt=None,
-        value_col=5,
-        order="desc",
+    hd5_files,
+    scenario,
+    frame=None,
+    percent=0.15,
+    sorted_output_txt=None,
+    value_col=5,
+    order="desc",
 ):
     """
     Seleziona la lista di frame secondo lo scenario.
@@ -21,8 +43,9 @@ def select_frames(
     Parameters
     ----------
     hd5_files : list[str]
-        Lista di file HDF5 (o directory nel caso scaffold; usiamo solo il primo
-        per leggere i frame nel caso 'all_frames').
+        Lista di file HDF5 (o directory nel caso scaffold; nel caso scaffold i
+        frame vengono ricavati dai file ``generators__*.pck`` comuni a tutte le
+        directory).
     scenario : {"single_frame", "all_frames", "top_percent"}
         Strategia di selezione.
     frame : int or None
@@ -45,6 +68,9 @@ def select_frames(
     list[int] : lista di frame selezionati.
     """
 
+    if percent <= 0 or percent > 1:
+        raise ValueError("percent must be in the interval (0, 1].")
+
     # caso 1 — singolo frame
     if scenario == "single_frame":
         if frame is None:
@@ -56,8 +82,23 @@ def select_frames(
         with h5py.File(hd5_files[0], "r") as f:
             all_frames = sorted(map(int, f.keys()))
     except (OSError, IsADirectoryError):
-        # nel caso scaffold, hd5_files[0] non è un hd5 → non usare HDF5
-        all_frames = None
+        # nel caso scaffold, hd5_files[0] non è un hd5 → inferiamo dai file pck
+        per_directory_frames = [_list_scaffold_frames(d) for d in hd5_files]
+        if scenario == "all_frames":
+            if not all(per_directory_frames):
+                raise RuntimeError(
+                    "Cannot infer frames for 'all_frames': no generators__*.pck files found."
+                )
+            common_frames = set(per_directory_frames[0])
+            for frames in per_directory_frames[1:]:
+                common_frames &= set(frames)
+            if not common_frames:
+                raise RuntimeError(
+                    "Cannot infer frames for 'all_frames': scaffold directories do not share common frames."
+                )
+            all_frames = sorted(common_frames)
+        else:
+            all_frames = None
 
     if scenario == "all_frames":
         if all_frames is None:
@@ -69,7 +110,17 @@ def select_frames(
         if sorted_output_txt is None:
             raise ValueError("sorted_output_txt required for scenario='top_percent'")
 
+        if not os.path.exists(sorted_output_txt):
+            raise FileNotFoundError(
+                f"sorted_output_txt not found: {sorted_output_txt}"
+            )
+
         results = np.loadtxt(sorted_output_txt)
+        results = np.atleast_2d(results)
+        if results.ndim != 2 or results.shape[1] <= value_col:
+            raise ValueError(
+                f"sorted_output_txt must have at least {value_col + 1} columns; got shape {results.shape}."
+            )
         timepoints = results[:, 0].astype(int)
         values = results[:, value_col]
 
@@ -112,11 +163,33 @@ def aggregate_frames(hd5_files, frames, loader_fn, num_ROIs):
     np.ndarray(num_ROIs,) : nodal strength media su soggetti × frame.
     """
 
-    strengths = [
-        loader_fn(hd5_or_directory, frame, num_ROIs)
-        for hd5_or_directory in hd5_files
-        for frame in frames
-    ]
+    total = np.zeros(num_ROIs, dtype=float)
+    count = 0
 
-    strengths = np.stack(strengths, axis=0)
-    return strengths.mean(axis=0)
+    for hd5_or_directory in hd5_files:
+        for frame in frames:
+            try:
+                strength = np.asarray(loader_fn(hd5_or_directory, frame, num_ROIs), dtype=float)
+            except Exception as exc:  # pragma: no cover - defensive logging
+                warnings.warn(
+                    f"Skipping subject={hd5_or_directory}, frame={frame}: {exc}",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                continue
+
+            if strength.shape[0] != num_ROIs:
+                warnings.warn(
+                    f"Skipping subject={hd5_or_directory}, frame={frame}: expected length {num_ROIs}, got {strength.shape[0]}",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                continue
+
+            total += strength
+            count += 1
+
+    if count == 0:
+        raise RuntimeError("No valid nodal strength vectors computed; check inputs and frames.")
+
+    return total / count

@@ -37,5 +37,13 @@ def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
 
 def load_single_frame_dv(hd5_file, frame, num_ROIs):
     with h5py.File(hd5_file, "r") as f:
+        if str(frame) not in f:
+            raise KeyError(f"Frame {frame} not found in {hd5_file}")
         data = f[str(frame)][:]
-    return compute_nodal_strength_dv(data, num_ROIs=num_ROIs)
+
+    nodal = compute_nodal_strength_dv(data, num_ROIs=num_ROIs)
+    if nodal.shape[0] != num_ROIs:
+        raise ValueError(
+            f"Computed nodal strength has length {nodal.shape[0]}, expected {num_ROIs} (file={hd5_file}, frame={frame})."
+        )
+    return nodal
