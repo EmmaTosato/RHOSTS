@@ -7,15 +7,20 @@
 #SBATCH -o /data/etosato/RHOSTS/Logs/%A_%a_edge.out
 #SBATCH -e /data/etosato/RHOSTS/Logs/%A_%a_edge.err
 
+# Subjects
 subjects=("745555" "905147" "943862")
 
 sub=${subjects[$SLURM_ARRAY_TASK_ID]}
 
+# Input code and files
 codepath="/data/etosato/RHOSTS/High_order_TS/simplicial_multivariate.py"
 filename="/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/${sub}_ts_zscore_ctx_sub.txt"
-weighted_network="/data/etosato/RHOSTS/Output/lorenzo_data/${sub}/${sub}_weighted_net"
+
+# Output  files
+weighted_network="/data/etosato/RHOSTS/Output/lorenzo_data/${sub}/${sub}_edge_projection"
 result_file="/data/etosato/RHOSTS/Output/lorenzo_data/${sub}/${sub}_indicators.txt"
 
+# Creating directories if they don't exist
 mkdir -p "$(dirname "$weighted_network")"
 mkdir -p "$(dirname "$result_file")"
 
