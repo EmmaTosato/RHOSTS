@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=20G
 #SBATCH -t 1-00:00:00
-#SBATCH --array=51-1199%8
+#SBATCH --array=0-100%8
 #SBATCH -o /data/etosato/RHOSTS/Logs/%x_%A_%a.out
 #SBATCH -e /data/etosato/RHOSTS/Logs/%x_%A_%a.err
 
@@ -17,7 +17,7 @@ export JAVA_TOOL_OPTIONS="-Xms2G -Xmx16G"
 cd ../High_order_TS_with_scaffold/
 
 codepath="simplicial_multivariate.py"
-filename="./../Input/subject1_left.txt"
+filename="./../Output/lorenzo_data/134829/134829_indicators.txt"
 javaplexpath="javaplex/javaplex.jar"
 outtag="scaffold_"   # prefisso output (come negli esempi originali)
 
@@ -26,7 +26,7 @@ t=${SLURM_ARRAY_TASK_ID}
 tnext=$((t+1))
 
 # Assicura cartelle output esistano
-mkdir -p ../Output/generators1200
+mkdir -p ../Output/lorenzo_data/134829/generators
 mkdir -p ../Example
 
 echo "---- Starting scaffold for t=${t} ----"
