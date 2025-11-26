@@ -7,6 +7,7 @@ import os
 
 def load_scaffold_singletime(directory, single_time, hom_group=1):
     """Load a single scaffold graph from disk and construct a weighted NetworkX graph."""
+    # Pick generators from the designated folder
     path = os.path.join(directory, f"generators__{single_time}.pck")
 
     if not os.path.exists(path):
@@ -31,16 +32,16 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
             f"hom_group={hom_group} missing or malformed in scaffold pickle {path}"
         ) from exc
 
-    # Each persistence cycle corresponds to a collection of edges; the
-    # persistence interval is treated as the cycle weight and is added to every
-    # edge in that cycle. When multiple cycles traverse the same undirected
-    # edge, their weights accumulate, capturing how often an edge participates
-    # in the scaffold across generators.
+    # It extracts the list of cycles for the chosen homology group (H1) and loops over them
     for cycle in cycles:
+        # # Persistence is a scalar
         w = float(cycle.persistence_interval())
+
+        # For each edge in the cycle, add π_g
         for e in cycle.cycles():
             u, v = int(e[0]), int(e[1])
             if G.has_edge(u, v):
+                # Add weight with subscript notation (Edge attributes)
                 G[u][v]["weight"] += w
             else:
                 G.add_edge(u, v, weight=w)
@@ -48,10 +49,9 @@ def load_scaffold_singletime(directory, single_time, hom_group=1):
 
 
 def compute_nodal_strength_scaffold(G, num_ROIs=100):
-    """Convert a scaffold graph into a nodal strength vector."""
-    # Project weighted edges to node-level strength using NetworkX degree with
-    # the edge weights accumulated above.
+    """Convert a scaffold graph into a nodal strength vector, by projecting ."""
     nodal = np.zeros(num_ROIs)
+   # Retrieving the sum of the weights of the incident arcs at each node.
     for node, strength in G.degree(weight="weight"):
         if isinstance(node, int) and node < num_ROIs:
             nodal[node] = strength

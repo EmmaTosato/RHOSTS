@@ -50,7 +50,6 @@ def load_single_frame_dv(hd5_file, frame, num_ROIs):
     """Load one DV frame from an HDF5 file and compute nodal strength."""
     with h5py.File(hd5_file, "r") as f:
         # DV files expose one dataset per frame, keyed by the frame index as a
-        # string (e.g., "37").
         if str(frame) not in f:
             raise KeyError(f"Frame {frame} not found in {hd5_file}")
         data = f[str(frame)][:]
