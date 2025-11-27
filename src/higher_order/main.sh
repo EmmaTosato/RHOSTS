@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J higher_order_brains
+#SBATCH -J brain_images
 #SBATCH -p brains
 #SBATCH --cpus-per-task=5
 #SBATCH --mem=32G
 #SBATCH -t 1-00:00:00
 # Commented out array directive to default to single-job sequential mode
 # To run in parallel, use: sbatch --array=0-N src/higher_order/main.sh
-#SBATCH --array=0-4
+##SBATCH --array=0-4
 #SBATCH -o /data/etosato/RHOSTS/Logs/%x_%A_%a.out
 #SBATCH -e /data/etosato/RHOSTS/Logs/%x_%A_%a.err
 
@@ -24,6 +24,7 @@ set -u
 
 # Repository root directory
 repo_dir="${RHOSTS_ROOT:-/data/etosato/RHOSTS}"
+cd "${repo_dir}" || exit 1
 
 # Input TSV file: SUBJECT_ID<TAB>INPUTS (space-separated paths)
 # Update --array in SLURM header to match row count
