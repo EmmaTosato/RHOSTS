@@ -28,10 +28,15 @@ for subj in "${subjects[@]}"; do
         if [ "${end}" -gt "${max_t}" ]; then
             end="${max_t}"
         fi
+        
+        # Calculate array size for this chunk (0 to N-1)
+        count=$(( end - start + 1 ))
+        array_limit=$(( count - 1 ))
 
         # Smart Resume: Check if all output files for this chunk exist
         all_done=true
-        for (( t=start; t<=end; t++ )); do
+        for (( i=0; i<=array_limit; i++ )); do
+            t=$(( start + i ))
             # Output path matches launch_High_order_TS_with_scaffold.sh logic
             outfile="/data/etosato/RHOSTS/Output/lorenzo_data/${subj}/generators/generators__${t}.pck"
             if [ ! -f "${outfile}" ]; then
@@ -41,8 +46,8 @@ for subj in "${subjects[@]}"; do
         done
 
         if [ "${all_done}" = "true" ]; then
-            echo "Skipping subject=${subj} array ${start}-${end} (already done)"
-            # Do not update prev_jid, so next job depends on the last *submitted* job (or runs immediately if none)
+            echo "Skipping subject=${subj} range ${start}-${end} (already done)"
+            # Do not update prev_jid
         else
             if [ -z "${prev_jid}" ]; then
                 dep_opt=""
@@ -50,8 +55,9 @@ for subj in "${subjects[@]}"; do
                 dep_opt="--dependency=afterok:${prev_jid}"
             fi
 
-            echo "Submitting subject=${subj} array ${start}-${end}%${concurrency}"
-            jid=$(sbatch ${dep_opt} --array=${start}-${end}%${concurrency} "${script}" "${subj}" | awk '{print $4}')
+            echo "Submitting subject=${subj} range ${start}-${end} (Array 0-${array_limit}, Offset ${start})"
+            # Pass 'start' as the offset
+            jid=$(sbatch ${dep_opt} --array=0-${array_limit}%${concurrency} "${script}" "${subj}" "${start}" | awk '{print $4}')
             prev_jid="${jid}"
         fi
 

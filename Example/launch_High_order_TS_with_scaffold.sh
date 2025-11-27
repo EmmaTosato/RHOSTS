@@ -10,12 +10,13 @@
 
 set -euo pipefail
 
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 SUBJECT_ID" >&2
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 SUBJECT_ID [OFFSET]" >&2
     exit 1
 fi
 
 subject="$1"
+offset="${2:-0}"  # Default offset to 0 if not provided
 
 # Memory Limits
 export JAVA_TOOL_OPTIONS="-Xms2G -Xmx16G"
@@ -29,7 +30,7 @@ javaplexpath="javaplex/javaplex.jar"
 outtag="scaffold_"
 
 # Current time of the arry
-t=${SLURM_ARRAY_TASK_ID}
+t=$((SLURM_ARRAY_TASK_ID + offset))
 tnext=$((t+1))
 
 # Output folder

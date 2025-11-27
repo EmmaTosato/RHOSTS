@@ -1,12 +1,4 @@
 #!/bin/bash
-################################################################################
-# Higher-Order Brain Network Analysis - SLURM Batch Script
-#
-# Usage: sbatch main.sh
-#        MODE=scaffold SCENARIO=all_frames sbatch main.sh
-#
-################################################################################
-
 #SBATCH -J higher_order_brains
 #SBATCH -p brains
 #SBATCH --cpus-per-task=5
@@ -35,12 +27,25 @@ repo_dir="${RHOSTS_ROOT:-/data/etosato/RHOSTS}"
 # Update --array in SLURM header to match row count
 input_table="${INPUT_TABLE:-${repo_dir}/Input/higher_order_inputs.tsv}"
 
+# Headless rendering configuration
+export PYVISTA_OFF_SCREEN=true
+export VTK_OFF_SCREEN=true
+export MPLBACKEND=Agg
+
 # Analysis parameters (override via environment variables)
+# You can change these defaults directly here to avoid typing them every time
 mode="${MODE:-dv}"                          # dv | scaffold
 scenario="${SCENARIO:-single_frame}"        # single_frame | all_frames | percent
 frame="${FRAME:-0}"                         # Frame index (for single_frame)
 percent="${PERCENT:-0.15}"                  # Top percentage (for percent scenario)
-metric="${METRIC:-coherence}"               # coherence | complexity
+
+# Infer metric from mode if not specified
+if [[ "${mode}" == "dv" ]]; then
+  default_metric="coherence"
+else
+  default_metric="complexity"
+fi
+metric="${METRIC:-${default_metric}}"       # coherence | complexity
 
 ################################################################################
 # VALIDATION & EXECUTION

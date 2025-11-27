@@ -2,7 +2,10 @@
 
 import argparse
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolorst
 import matplotlib.colors as mcolors
 from .maps.brain_map import compute_brainmap_dv, compute_brainmap_scaffold
 from .utils_neuromaps_brain import normal_view
@@ -10,12 +13,12 @@ from .utils_neuromaps_brain import normal_view
 def parse_args():
     """Define and parse CLI arguments for the brain map utilities."""
     p = argparse.ArgumentParser()
-    p.add_argument("--mode", choices=["dv", "scaffold"], required=True)
+    p.add_argument("--mode", choices=["dv", "scaffold", "group"], required=True)
     p.add_argument(
         "--inputs",
         nargs="+",
         required=True,
-        help="hd5 files (dv mode) OR scaffold folders (scaffold mode)",
+        help="hd5 files (dv), scaffold folders (scaffold), or npy files (group)",
     )
     p.add_argument(
         "--scenario",
@@ -43,7 +46,7 @@ def parse_args():
 
 
 def main():
-    """Dispatch to DV or scaffold pipeline and persist the resulting array."""
+    """Dispatch to DV, scaffold, or group pipeline and persist the resulting array."""
     args = parse_args()
 
     # Infer internal metric name and direction
@@ -55,7 +58,27 @@ def main():
         direction = "low"
 
     # Choose the correct computation based on the input modality
-    if args.mode == "dv":
+    if args.mode == "group":
+        # Group mode: inputs are .npy files to be averaged
+        print(f"Running GROUP analysis on {len(args.inputs)} files.")
+        arrays = []
+        for f in args.inputs:
+            try:
+                arr = np.load(f)
+                arrays.append(arr)
+            except Exception as e:
+                print(f"WARNING: Could not load {f}: {e}")
+        
+        if not arrays:
+            print("ERROR: No valid arrays loaded.")
+            exit(1)
+            
+        # Stack and average
+        stack = np.vstack(arrays)
+        nodal = np.mean(stack, axis=0)
+        print(f"Computed group mean from {len(arrays)} inputs.")
+
+    elif args.mode == "dv":
         nodal = compute_brainmap_dv(
             hd5_paths=args.inputs,
             scenario=args.scenario,
@@ -66,7 +89,7 @@ def main():
             metric=internal_metric,
             direction=direction,
         )
-    else:
+    else: # scaffold
         nodal = compute_brainmap_scaffold(
             scaffold_directories=args.inputs,
             scenario=args.scenario,
@@ -84,27 +107,33 @@ def main():
 
     # Generate and save visualization if requested
     if args.output_img:
-        # Define colormap as in the notebook
-        cmap = mcolors.LinearSegmentedColormap.from_list(
-            "green_yellow_red", ["#2ca25f", "#ffffbf", "#d73027"]
-        )
-        
-        # Generate the view
-        # Note: normal_view returns a figure
-        fig = normal_view(
-            current_nodestrength=nodal,
-            edges=True,
-            cmap=cmap,
-            q_thresh=0.0,
-            center_cbar=True,
-            alpha_graymap=0.99,
-            xlabel=r"$\langle s_i \rangle$"
-        )
-        
-        # Save the figure
-        fig.savefig(args.output_img, dpi=300, bbox_inches="tight")
-        print(f"Saved image to {args.output_img}")
-        plt.close(fig)
+        print(f"Attempting to generate image at {args.output_img}...")
+        try:
+            # Define colormap as in the notebook
+            cmap = mcolors.LinearSegmentedColormap.from_list(
+                "green_yellow_red", ["#2ca25f", "#ffffbf", "#d73027"]
+            )
+            
+            # Generate the view
+            # Note: normal_view returns a figure
+            fig = normal_view(
+                current_nodestrength=nodal,
+                edges=True,
+                cmap=cmap,
+                q_thresh=0.0,
+                center_cbar=True,
+                alpha_graymap=0.99,
+                xlabel=r"$\langle s_i \rangle$"
+            )
+            
+            # Save the figure
+            fig.savefig(args.output_img, dpi=300, bbox_inches="tight")
+            print(f"Saved image to {args.output_img}")
+            plt.close(fig)
+        except Exception as e:
+            print(f"ERROR: Failed to generate image: {e}")
+            import traceback
+            traceback.print_exc()
 
 
 if __name__ == "__main__":
