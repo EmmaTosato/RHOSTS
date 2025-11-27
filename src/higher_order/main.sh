@@ -1,4 +1,12 @@
 #!/bin/bash
+################################################################################
+# Higher-Order Brain Network Analysis - SLURM Batch Script
+#
+# Usage: sbatch main.sh
+#        MODE=scaffold SCENARIO=all_frames sbatch main.sh
+#
+################################################################################
+
 #SBATCH -J higher_order_brains
 #SBATCH -p brains
 #SBATCH --cpus-per-task=5
@@ -10,71 +18,98 @@
 
 set -euo pipefail
 
-# Root directory of the repository on the cluster filesystem.
-# Override with RHOSTS_ROOT to adapt to a different install path.
+# Activate conda environment
+set +u
+source $(conda info --base)/etc/profile.d/conda.sh || true
+conda activate rhosts || true
+set -u
+
+################################################################################
+# CONFIGURATION
+################################################################################
+
+# Repository root directory
 repo_dir="${RHOSTS_ROOT:-/data/etosato/RHOSTS}"
 
-# TSV file listing the jobs to run with two columns: SUBJECT_ID and INPUTS.
-# The INPUTS column may contain one or more paths separated by spaces. When
-# targeting scaffold mode, each path should be a directory; for dv mode, each
-# path should be an HDF5 file. Adjust --array above to cover the number of rows
-# in this table (0-indexed).
+# Input TSV file: SUBJECT_ID<TAB>INPUTS (space-separated paths)
+# Update --array in SLURM header to match row count
 input_table="${INPUT_TABLE:-${repo_dir}/Input/higher_order_inputs.tsv}"
 
+# Analysis parameters (override via environment variables)
+mode="${MODE:-dv}"                          # dv | scaffold
+scenario="${SCENARIO:-single_frame}"        # single_frame | all_frames | percent
+frame="${FRAME:-0}"                         # Frame index (for single_frame)
+percent="${PERCENT:-0.15}"                  # Top percentage (for percent scenario)
+metric="${METRIC:-coherence}"               # coherence | complexity
+
+################################################################################
+# VALIDATION & EXECUTION
+################################################################################
+
 if [[ ! -f "${input_table}" ]]; then
-  cat <<MSG >&2
-Missing ${input_table}.
-Create a TSV with two columns: SUBJECT_ID<TAB>INPUTS (space-separated paths).
-Example:
-  sub-001\t/data/.../sub-001.h5
-  sub-002\t/data/.../sub-002_scaffold/frame_* /data/.../sub-002_scaffold/other_cycles
-MSG
+  echo "ERROR: Input table not found: ${input_table}" >&2
   exit 1
 fi
 
 mapfile -t rows < <(grep -v '^\s*$' "${input_table}")
-
 if [[ ${#rows[@]} -eq 0 ]]; then
-  echo "No jobs found in ${input_table}" >&2
+  echo "ERROR: No jobs found in ${input_table}" >&2
   exit 1
 fi
 
 if [[ ${SLURM_ARRAY_TASK_ID} -ge ${#rows[@]} ]]; then
-  echo "Invalid SLURM_ARRAY_TASK_ID=${SLURM_ARRAY_TASK_ID} (only ${#rows[@]} rows in ${input_table})" >&2
+  echo "ERROR: Invalid array task ID (only ${#rows[@]} rows)" >&2
   exit 1
 fi
 
+# Parse current job from input table
 IFS=$'\t' read -r subject input_paths <<<"${rows[${SLURM_ARRAY_TASK_ID}]}"
-read -r -a inputs <<<"${input_paths}"
+read -r -a all_inputs <<<"${input_paths}"
 
-# Configure higher-order brain map parameters. Override via environment
-# variables to customize a job without editing the script.
-mode="${MODE:-dv}"                          # dv | scaffold
-scenario="${SCENARIO:-single_frame}"        # single_frame | all_frames | top_percent
-frame="${FRAME:-0}"                         # frame index for single_frame scenario
-percent="${PERCENT:-0.15}"                  # used by top_percent scenario
-metric="${METRIC:-hyper}"                   # hyper | complexity
-direction="${DIRECTION:-high}"              # high | low
+# Separate TXT file from HDF5/scaffold inputs
+# The TXT file (indicators) is always the last one in the list
+txt_file=""
+data_inputs=()
 
+for input in "${all_inputs[@]}"; do
+  if [[ "$input" == *"indicators.txt" ]] || [[ "$input" == *.txt ]]; then
+    txt_file="$input"
+  else
+    data_inputs+=("$input")
+  fi
+done
+
+# Map "percent" scenario to python's "top_percent"
+py_scenario="${scenario}"
+if [[ "${scenario}" == "percent" ]]; then
+  py_scenario="top_percent"
+fi
+
+# Setup output paths
 out_dir="${repo_dir}/Output/higher_order/${mode}"
-mkdir -p "${repo_dir}/Logs" "${out_dir}"
+img_dir="${repo_dir}/Output/Images/${mode}"
+mkdir -p "${repo_dir}/Logs" "${out_dir}" "${img_dir}"
 
 out_file="${out_dir}/${subject}_${scenario}.npy"
+img_file="${img_dir}/${subject}_${scenario}.png"
 
+# Build arguments and execute
 args=(
   --mode "${mode}"
-  --inputs "${inputs[@]}"
-  --scenario "${scenario}"
+  --inputs "${data_inputs[@]}"
+  --scenario "${py_scenario}"
   --percent "${percent}"
   --metric "${metric}"
-  --direction "${direction}"
   --output-npy "${out_file}"
+  --output-img "${img_file}"
 )
 
-# Only pass --frame when explicitly set to avoid conflicting with scenarios
-# that iterate over all frames.
-if [[ -n "${FRAME:-}" ]]; then
+if [[ "${scenario}" == "single_frame" ]] || [[ -n "${FRAME:-}" ]]; then
   args+=(--frame "${frame}")
+fi
+
+if [[ -n "${txt_file}" ]]; then
+  args+=(--sorted-output-txt "${txt_file}")
 fi
 
 python -m src.higher_order.main "${args[@]}"

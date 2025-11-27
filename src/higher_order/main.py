@@ -2,7 +2,10 @@
 
 import argparse
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from .maps.brain_map import compute_brainmap_dv, compute_brainmap_scaffold
+from .utils_neuromaps_brain import normal_view
 
 def parse_args():
     """Define and parse CLI arguments for the brain map utilities."""
@@ -24,28 +27,32 @@ def parse_args():
     p.add_argument("--sorted-output-txt", type=str)
     p.add_argument("--num-rois", type=int, default=100)
 
-    # Additional CLI flags to choose metric (hyper/coherence vs complexity)
-    # and whether to focus on high or low values when selecting frames
+    # Metric determines the sorting column and direction
+    # coherence -> hyper-coherence (high values)
+    # complexity -> complexity (low values)
     p.add_argument(
         "--metric",
-        choices=["hyper", "complexity"],
-        default="hyper",
-        help="Metric column in txt: 'hyper' (col 5) or 'complexity' (col 1).",
-    )
-    p.add_argument(
-        "--direction",
-        choices=["high", "low"],
-        default="high",
-        help="'high' = top percent, 'low' = bottom percent.",
+        choices=["coherence", "complexity"],
+        default="coherence",
+        help="Metric for top_percent: 'coherence' (high) or 'complexity' (low).",
     )
 
     p.add_argument("--output-npy", required=True)
+    p.add_argument("--output-img", help="Path to save the brain map image (optional)")
     return p.parse_args()
 
 
 def main():
     """Dispatch to DV or scaffold pipeline and persist the resulting array."""
     args = parse_args()
+
+    # Infer internal metric name and direction
+    if args.metric == "coherence":
+        internal_metric = "hyper"
+        direction = "high"
+    else:  # complexity
+        internal_metric = "complexity"
+        direction = "low"
 
     # Choose the correct computation based on the input modality
     if args.mode == "dv":
@@ -56,8 +63,8 @@ def main():
             percent=args.percent,
             sorted_output_txt=args.sorted_output_txt,
             num_ROIs=args.num_rois,
-            metric=args.metric,
-            direction=args.direction,
+            metric=internal_metric,
+            direction=direction,
         )
     else:
         nodal = compute_brainmap_scaffold(
@@ -67,13 +74,37 @@ def main():
             percent=args.percent,
             sorted_output_txt=args.sorted_output_txt,
             num_ROIs=args.num_rois,
-            metric=args.metric,
-            direction=args.direction,
+            metric=internal_metric,
+            direction=direction,
         )
 
     # Persist the numpy array for downstream analysis or visualization
     np.save(args.output_npy, nodal)
-    print("Saved to", args.output_npy)
+    print(f"Saved array to {args.output_npy}")
+
+    # Generate and save visualization if requested
+    if args.output_img:
+        # Define colormap as in the notebook
+        cmap = mcolors.LinearSegmentedColormap.from_list(
+            "green_yellow_red", ["#2ca25f", "#ffffbf", "#d73027"]
+        )
+        
+        # Generate the view
+        # Note: normal_view returns a figure
+        fig = normal_view(
+            current_nodestrength=nodal,
+            edges=True,
+            cmap=cmap,
+            q_thresh=0.0,
+            center_cbar=True,
+            alpha_graymap=0.99,
+            xlabel=r"$\langle s_i \rangle$"
+        )
+        
+        # Save the figure
+        fig.savefig(args.output_img, dpi=300, bbox_inches="tight")
+        print(f"Saved image to {args.output_img}")
+        plt.close(fig)
 
 
 if __name__ == "__main__":
