@@ -48,7 +48,12 @@ if [[ "${mode}" == "dv" ]]; then
 else
   default_metric="complexity"
 fi
-metric="${METRIC:-${default_metric}}"       # coherence | complexity
+metric="${METRIC:-${default_metric}}"
+
+# Image generation control
+# Set to "true" to enable image generation (requires xvfb on cluster)
+# Set to "false" to only generate .npy files (default, images can be generated locally)
+generate_images="${GENERATE_IMAGES:-false}"       # coherence | complexity
 
 ################################################################################
 # VALIDATION & EXECUTION
@@ -137,8 +142,8 @@ process_subject() {
     --output-npy "${out_file}"
   )
 
-  # Only generate image if requested (Single Subject case)
-  if [[ "${generate_image}" == "true" ]]; then
+  # Only generate image if requested (Single Subject case) AND images are enabled
+  if [[ "${generate_image}" == "true" ]] && [[ "${generate_images}" == "true" ]]; then
     args+=(--output-img "${img_file}")
   fi
 
@@ -204,10 +209,18 @@ else
       group_inputs+=("${repo_dir}/Output/lorenzo_data/node_strengths/${mode}/${subj}_${scenario}.npy")
     done
     
-    python -m src.higher_order.main \
-      --mode group \
-      --inputs "${group_inputs[@]}" \
-      --output-npy "${group_npy}" \
-      --output-img "${group_img}"
+    
+    group_args=(
+      --mode group
+      --inputs "${group_inputs[@]}"
+      --output-npy "${group_npy}"
+    )
+    
+    # Only generate group image if enabled
+    if [[ "${generate_images}" == "true" ]]; then
+      group_args+=(--output-img "${group_img}")
+    fi
+    
+    python -m src.higher_order.main "${group_args[@]}"
   fi
 fi
