@@ -8,7 +8,6 @@ __pycache__/
 .DS_Store
 **/*.class
 
-
 # Other
 *.ipynb_checkpoints/
 
