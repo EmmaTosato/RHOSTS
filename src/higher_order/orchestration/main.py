@@ -7,8 +7,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolorst
 import matplotlib.colors as mcolors
-from .maps.brain_map import compute_brainmap_dv, compute_brainmap_scaffold
-from .utils_neuromaps_brain import normal_view
+from ..nodal_strength.pipeline import compute_brainmap_dv, compute_brainmap_scaffold
+from ..visualization.utils_neuromaps_brain import normal_view
 
 def parse_args():
     """Define and parse CLI arguments for the brain map utilities."""

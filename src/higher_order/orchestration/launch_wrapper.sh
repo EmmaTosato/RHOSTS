@@ -23,7 +23,7 @@ echo "----------------------------------------------------------------"
 # 2. Submit the Array Job (Subject Level)
 # We use --parsable to capture just the Job ID
 # We pass the arguments as environment variables to override defaults in main.sh
-JOB_ID=$(MODE="${MODE}" SCENARIO="${SCENARIO}" sbatch --parsable --array=0-$((NUM_SUBS-1)) src/higher_order/main.sh)
+JOB_ID=$(MODE="${MODE}" SCENARIO="${SCENARIO}" sbatch --parsable --array=0-$((NUM_SUBS-1)) src/higher_order/orchestration/main.sh)
 
 echo "Submitted Subject Array Job: ${JOB_ID}"
 
@@ -34,7 +34,7 @@ if [ "$NUM_SUBS" -gt 1 ]; then
     # Define the command for the group analysis
     # It uses the same main.py but in 'group' mode
     # We use wildcards to catch all outputs from the previous step
-    GROUP_CMD="python -m src.higher_order.main \
+    GROUP_CMD="python -m src.higher_order.orchestration.main \
         --mode group \
         --inputs /data/etosato/RHOSTS/Output/higher_order/${MODE}/*_${SCENARIO}.npy \
         --output-npy /data/etosato/RHOSTS/Output/higher_order/${MODE}/GROUP_AVERAGE.npy \
