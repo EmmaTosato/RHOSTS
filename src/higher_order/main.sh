@@ -28,7 +28,7 @@ cd "${repo_dir}" || exit 1
 
 # Input TSV file: SUBJECT_ID<TAB>INPUTS (space-separated paths)
 # Update --array in SLURM header to match row count
-input_table="${INPUT_TABLE:-${repo_dir}/Input/higher_order_inputs.tsv}"
+input_table="${INPUT_TABLE:-${repo_dir}/Input/lorenzo_data/tsv_files/higher_order_inputs.tsv}"
 
 # Headless rendering configuration
 export PYVISTA_OFF_SCREEN=true
