@@ -155,7 +155,7 @@ process_subject() {
     args+=(--sorted-output-txt "${txt_file}")
   fi
 
-  python -m src.higher_order.main "${args[@]}"
+  python -m src.higher_order.orchestration.main "${args[@]}"
 }
 
 # MAIN LOGIC
@@ -221,6 +221,6 @@ else
       group_args+=(--output-img "${group_img}")
     fi
     
-    python -m src.higher_order.main "${group_args[@]}"
+    python -m src.higher_order.orchestration.main "${group_args[@]}"
   fi
 fi

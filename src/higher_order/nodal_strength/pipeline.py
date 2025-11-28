@@ -1,8 +1,8 @@
 """High-level orchestration for deriving brain maps from DV or scaffold data."""
 
-from .builders import select_frames, aggregate_frames
-from ..nodal_strenght.nodal_strenght_dv import load_single_frame_dv
-from ..nodal_strenght.nodal_strength_scaffold import load_single_frame_scaffold
+from .utils import select_frames, aggregate_frames
+from .loaders_dv import load_single_frame_dv
+from .loaders_scaffold import load_single_frame_scaffold
 
 def compute_brainmap_dv(
     hd5_paths,

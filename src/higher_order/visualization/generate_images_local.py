@@ -20,7 +20,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 repo_root = os.path.abspath(os.path.join(script_dir, '..', '..'))
 sys.path.insert(0, repo_root)
 
-from src.higher_order.utils_neuromaps_brain import normal_view
+from src.higher_order.visualization.utils_neuromaps_brain import normal_view
 
 
 def generate_image(npy_path, output_path, cmap='green_yellow_red'):

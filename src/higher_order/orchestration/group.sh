@@ -56,7 +56,7 @@ echo "Scenario: ${scenario}"
 echo "Input Pattern: ${input_pattern}"
 
 # Execute
-python -m src.higher_order.main \
+python -m src.higher_order.orchestration.main \
   --mode group \
   --inputs ${input_pattern} \
   --output-npy "${out_npy}" \
