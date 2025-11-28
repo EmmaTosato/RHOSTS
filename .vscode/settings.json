@@ -1,0 +1,8 @@
+{
+    "files.exclude": {
+        ".idea": true,
+        ".vscode": true,
+        "**/__pycache__": true,
+        "**/.jython_cache": true
+    }
+}
