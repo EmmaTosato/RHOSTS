@@ -7,8 +7,8 @@
 # Commented out array directive to default to single-job sequential mode
 # To run in parallel, use: sbatch --array=0-N src/higher_order/main.sh
 ##SBATCH --array=0-4
-#SBATCH -o /data/etosato/RHOSTS/Logs/%x_%A_%a.out
-#SBATCH -e /data/etosato/RHOSTS/Logs/%x_%A_%a.err
+#SBATCH -o /data/etosato/RHOSTS/Logs/%x_%j.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/%x_%j.err
 
 set -euo pipefail
 
