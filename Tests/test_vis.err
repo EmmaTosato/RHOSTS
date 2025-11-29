@@ -1,2 +1,0 @@
-[0m[31m2025-11-27 17:35:06.730 (   2.022s) [        AD002100]vtkXOpenGLRenderWindow.:464    ERR| vtkXOpenGLRenderWindow (0x4c65d30): bad X server connection. DISPLAY=[0m
-/var/lib/slurm/slurmd/job148152/slurm_script: line 4: 139344 Aborted                 (core dumped) python -u test_vis.py
