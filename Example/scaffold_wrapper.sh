@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=1G
 #SBATCH -t 00:10:00
-#SBATCH -o /data/etosato/RHOSTS/Logs/%x_%j.out
-#SBATCH -e /data/etosato/RHOSTS/Logs/%x_%j.err
+#SBATCH -o /data/etosato/RHOSTS/Logs/scaffold_generation/%x_%j.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/scaffold_generation/%x_%j.err
 
 set -euo pipefail
 
@@ -52,7 +52,8 @@ for subj in "${subjects[@]}"; do
             if [ -z "${prev_jid}" ]; then
                 dep_opt=""
             else
-                dep_opt="--dependency=afterok:${prev_jid}"
+                # Use afterany so the next job starts even if the previous one has failed tasks
+                dep_opt="--dependency=afterany:${prev_jid}"
             fi
 
             echo "Submitting subject=${subj} range ${start}-${end} (Array 0-${array_limit}, Offset ${start})"
