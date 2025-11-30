@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
 #SBATCH -t 00:30:00
-#SBATCH -o /data/etosato/RHOSTS/Logs/scaffold_generation/verify_%j.out
-#SBATCH -e /data/etosato/RHOSTS/Logs/scaffold_generation/verify_%j.err
+#SBATCH -o /data/etosato/RHOSTS/Logs/verification_scaffold/verify_%j.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/verification_scaffold/verify_%j.err
 
 set -e
 

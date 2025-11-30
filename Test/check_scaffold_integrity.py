@@ -4,20 +4,36 @@ import pickle
 import argparse
 from pathlib import Path
 
+# Add path to find Holes module
+sys.path.append("/data/etosato/RHOSTS/High_order_TS_with_scaffold")
+try:
+    import Holes
+except ImportError:
+    # If Holes is not found, we might still be able to unpickle if we are lucky, 
+    # but likely it will fail. We'll proceed and see.
+    pass
+
 def check_file(filepath):
     """
-    Checks if a pickle file is valid.
-    Returns True if valid, False otherwise.
+    Checks if a pickle file is valid and counts cycles.
+    Returns (True, cycle_count) if valid, (False, 0) otherwise.
     """
     try:
         if os.path.getsize(filepath) == 0:
-            return False
+            return False, 0
         with open(filepath, "rb") as f:
-            pickle.load(f)
-        return True
+            data = pickle.load(f)
+        
+        cycle_count = 0
+        if isinstance(data, dict):
+            for key in data:
+                if isinstance(data[key], list):
+                    cycle_count += len(data[key])
+        
+        return True, cycle_count
     except Exception as e:
-        print(f"Error checking {filepath}: {e}")
-        return False
+        # print(f"Error checking {filepath}: {e}")
+        return False, 0
 
 def main():
     parser = argparse.ArgumentParser(description="Check integrity of pickle files in a directory.")
@@ -44,8 +60,10 @@ def main():
         if i % 100 == 0:
             print(f"Processed {i}/{len(files)}...")
             
-        if check_file(file_path):
+        is_valid, count = check_file(file_path)
+        if is_valid:
             valid_count += 1
+            print(f"VALID: {file_path} - Cycles: {count}")
         else:
             print(f"CORRUPTED: {file_path}")
             corrupted.append(file_path)
