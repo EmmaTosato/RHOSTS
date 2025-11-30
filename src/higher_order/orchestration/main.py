@@ -116,6 +116,11 @@ def main():
             
             # Generate the view
             # Note: normal_view returns a figure
+            import os
+            if os.environ.get("DISPLAY") is None:
+                print("WARNING: DISPLAY environment variable not set. Skipping image generation to avoid crash.")
+                return
+
             fig = normal_view(
                 current_nodestrength=nodal,
                 edges=True,
@@ -131,9 +136,10 @@ def main():
             print(f"Saved image to {args.output_img}")
             plt.close(fig)
         except Exception as e:
-            print(f"ERROR: Failed to generate image: {e}")
-            import traceback
-            traceback.print_exc()
+            print(f"WARNING: Failed to generate image: {e}")
+            print("Proceeding without image generation. This is likely due to missing X server (xvfb).")
+            # Do not re-raise, just continue
+
 
 
 if __name__ == "__main__":

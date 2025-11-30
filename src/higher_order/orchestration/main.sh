@@ -155,7 +155,18 @@ process_subject() {
     args+=(--sorted-output-txt "${txt_file}")
   fi
 
-  python -m src.higher_order.orchestration.main "${args[@]}"
+  # Wrap with xvfb-run if generating images
+  cmd="python -m src.higher_order.orchestration.main"
+  if [[ "${generate_image}" == "true" ]] && [[ "${generate_images}" == "true" ]]; then
+    # Check if xvfb-run is available
+    if command -v xvfb-run &> /dev/null; then
+      cmd="xvfb-run -a ${cmd}"
+    else
+      echo "WARNING: xvfb-run not found, attempting to run without it. Image generation may fail."
+    fi
+  fi
+
+  ${cmd} "${args[@]}"
 }
 
 # MAIN LOGIC
