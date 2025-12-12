@@ -115,26 +115,37 @@ def main():
             )
             
             # Generate the view
-            # Note: normal_view returns a figure
             import os
+            fig = None
             if os.environ.get("DISPLAY") is None:
-                print("WARNING: DISPLAY environment variable not set. Skipping image generation to avoid crash.")
-                return
-
-            fig = normal_view(
-                current_nodestrength=nodal,
-                edges=True,
-                cmap=cmap,
-                q_thresh=0.0,
-                center_cbar=True,
-                alpha_graymap=0.99,
-                xlabel=r"$\langle s_i \rangle$"
-            )
+                print("WARNING: DISPLAY environment variable not set. Using nilearn fallback.")
+                from ..visualization.utils_nilearn_brain import nilearn_view
+                try:
+                    fig = nilearn_view(
+                        current_nodestrength=nodal,
+                        cmap='RdBu_r',
+                        title=f"Brain Map (Nilearn) - {args.metric}"
+                    )
+                except Exception as e:
+                    print(f"ERROR: Nilearn fallback failed: {e}")
+                    return
+            else:
+                # Use original surfplot method
+                fig = normal_view(
+                    current_nodestrength=nodal,
+                    edges=True,
+                    cmap=cmap,
+                    q_thresh=0.0,
+                    center_cbar=True,
+                    alpha_graymap=0.99,
+                    xlabel=r"$\langle s_i \rangle$"
+                )
             
             # Save the figure
-            fig.savefig(args.output_img, dpi=300, bbox_inches="tight")
-            print(f"Saved image to {args.output_img}")
-            plt.close(fig)
+            if fig is not None:
+                fig.savefig(args.output_img, dpi=300, bbox_inches="tight")
+                print(f"Saved image to {args.output_img}")
+                plt.close(fig)
         except Exception as e:
             print(f"WARNING: Failed to generate image: {e}")
             print("Proceeding without image generation. This is likely due to missing X server (xvfb).")

@@ -10,7 +10,6 @@ from brainspace.datasets import load_parcellation
 import matplotlib.ticker as ticker
 from matplotlib import font_manager as fm
 
-import os
 import numpy as np
 import svgutils.transform as sg
 import copy
