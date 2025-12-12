@@ -1,9 +1,20 @@
 """Scaffold-based nodal strength helpers."""
 
+import os
+import sys
+
+# Hack: pickle loading requires 'Holes' module to be importable.
+# It lives in High_order_TS_with_scaffold at the repo root.
+# We infer the repo root from this file's location: .../src/higher_order/nodal_strength/loaders_scaffold.py
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+_repo_root = os.path.abspath(os.path.join(_current_dir, "../../.."))
+_holes_path = os.path.join(_repo_root, "High_order_TS_with_scaffold")
+if _holes_path not in sys.path:
+    sys.path.append(_holes_path)
+
 import numpy as np
 import networkx as nx
 import pickle as pk
-import os
 
 def load_scaffold_singletime(directory, single_time, hom_group=1):
     """Load a single scaffold graph from disk and construct a weighted NetworkX graph."""
