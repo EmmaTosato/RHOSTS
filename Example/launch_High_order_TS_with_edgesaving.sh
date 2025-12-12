@@ -8,7 +8,7 @@
 #SBATCH -e /data/etosato/RHOSTS/Logs/%A_%a_edge.err
 
 # Subjects
-subjects=("745555" "905147" "943862")
+subjects=("134829" "393247" "745555" "905147" "943862")
 
 sub=${subjects[$SLURM_ARRAY_TASK_ID]}
 
