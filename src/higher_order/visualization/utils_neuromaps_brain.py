@@ -27,14 +27,7 @@ def _pick_font_family(preferred=PREFERRED_FONT, fallback=FALLBACK_FONT):
     if preferred in available_fonts:
         return preferred
 
-    warnings.warn(
-        (
-            f"Matplotlib font '{preferred}' is not installed."
-            f" Falling back to '{fallback}'."
-            " Install the PT Serif family to reproduce the original figures."
-        ),
-        stacklevel=2,
-    )
+    # Silently fallback to avoid cluttering logs
     return fallback
 
 
