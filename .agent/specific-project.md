@@ -1,6 +1,7 @@
 # RHOSTS Project - Specific Rules
 
-This document contains rules and configurations specific to the **RHOSTS** project.
+If you are an agent, follow and memorize these rules and instructions.
+This document contains rules and configurations specific to the **RHOSTS** project. 
 
 ---
 
@@ -39,3 +40,7 @@ Follow the general test organization rules with these specifics:
 
 ---
 
+
+## Language
+- Use English for the code and documentation.
+- If in the conversation, i use Italian, stick with it, but only for the chat .
