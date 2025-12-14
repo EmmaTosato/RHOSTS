@@ -34,29 +34,25 @@ def get_subject_list(subjects_file):
     return subjects
 
 def main():
+    # 1. Only CLI argument: path to JSON config. Everything else is in the config file.
     parser = argparse.ArgumentParser(description="Run RHOSTS Higher-Order Analysis")
     parser.add_argument("--config", required=True, help="Path to JSON configuration file")
     args = parser.parse_args()
 
-    # 1. Load Configuration
+    # 2. Load JSON config
     config = load_config(args.config)
     print(f"Loaded configuration from {args.config}")
 
-    mode = config['mode']  # "dv" or "scaffold"
+    # Required parameters
+    mode = config['mode']
     scenario = config['scenario']
+    subjects_list_file = config['subjects_list_file']
+    # Optional parameters with defaults
     num_rois = config.get('num_rois', 116)
-    
-    # 2. Get Subject List
-    subjects = get_subject_list(config['subjects_list_file'])
-    print(f"Found {len(subjects)} subjects to process.")
-
-    # 3. Parameter Mapping for Frame Selection
     metric = config.get('metric', 'coherence')
     percent = config.get('percent', 0.15)
     
-    # Logic: 
-    # Coherence -> High Values (Desc) -> Col 5 (Hyper-Coherence)
-    # Complexity -> Low Values (Asc) -> Col 1 (Hyper-Complexity)
+    # Metric -> column/order mapping
     if metric == 'coherence':
         value_col = 5
         order = 'desc'
@@ -64,40 +60,32 @@ def main():
         value_col = 1
         order = 'asc'
     else:
-        # Fallback/Custom (user can define col/order in config if needed in future)
         value_col = config.get('custom_metric_col', 5)
         order = config.get('custom_order', 'desc')
 
+    # 3. Load subject list
+    subjects = get_subject_list(subjects_list_file)
+    print(f"Found {len(subjects)} subjects to process.")
+
     # 4. Processing Loop
     subject_averages = []
+    print(f"Processing: {len(subjects)} subjects, mode={mode}, scenario={scenario}")
 
-    for subj_id in subjects:
+    for subj_idx, subj_id in enumerate(subjects, 1):
         try:
-            # Resolve paths
-            data_path = config['data_path_pattern'].format(subject=subj_id, mode=mode)
-            indicators_path = config['indicators_path_pattern'].format(subject=subj_id, mode=mode)
-            
-            # Select Frames
-            # Note: For 'top_percent', we need the indicators file.
-            # For 'all_frames' in Scaffold, we need the directory.
-            # select_frames handles input types (file vs dir) internally based on mode/input.
-            
-            # Prepare inputs for select_frames
-            # DV mode uses hdf5 file, Scaffold uses directory
+            # Resolve paths based on mode
             if mode == 'dv':
-                input_source = data_path
+                data_path = config['data_path_pattern_dv'].format(subject=subj_id)
                 loader_fn = load_single_frame_dv
-            else: # scaffold
-                # data_path should be the directory for scaffold
-                # If pattern points to a file inside, we should take dirname?
-                # User config pattern usually points to the resource.
-                # For scaffold, it's a directory.
-                input_source = data_path 
+            else:  
+                data_path = config['data_path_pattern_scaffold'].format(subject=subj_id)
                 loader_fn = load_single_frame_scaffold
+            
+            indicators_path = config['indicators_path_pattern'].format(subject=subj_id)
 
             # Select frames for this subject
             frames = select_frames(
-                hd5_files=[input_source], # Pass as list
+                data_sources=[data_path], 
                 scenario=scenario,
                 frame=config.get('frame'),
                 percent=percent,
@@ -107,89 +95,63 @@ def main():
             )
             
             if not frames:
-                print(f"WARNING: No frames selected for subject {subj_id}. Skipping.")
+                print(f"  [{subj_idx}/{len(subjects)}] {subj_id}: No frames selected. Skipping.")
                 continue
 
-            # Average over Timepoints (Inner Loop)
-            # Implements: "Medio sui timepoints"
+            # Average over Timepoints 
             time_accum = np.zeros(num_rois, dtype=float)
             valid_frames = 0
             
             for frame in frames:
                 try:
-                    nodal = loader_fn(input_source, frame, num_rois)
+                    nodal = loader_fn(data_path, frame, num_rois)
                     time_accum += nodal
                     valid_frames += 1
                 except Exception as e:
-                    print(f"  Error loading frame {frame} for {subj_id}: {e}")
+                    pass  # Silently skip errors
             
             if valid_frames > 0:
                 subject_avg = time_accum / valid_frames
                 subject_averages.append(subject_avg)
-                # print(f"Processed subject {subj_id}: {valid_frames} frames.")
+                print(f"  [{subj_idx}/{len(subjects)}] {subj_id}: {valid_frames} frames processed")
             else:
-                print(f"WARNING: No valid frames loaded for subject {subj_id}.")
+                print(f"  [{subj_idx}/{len(subjects)}] {subj_id}: No valid frames")
 
         except Exception as e:
-            print(f"ERROR processing subject {subj_id}: {e}")
+            print(f"  [{subj_idx}/{len(subjects)}] {subj_id}: ERROR - {e}")
             continue
 
-    # 5. Average over Subjects (Outer Loop)
-    # Implements: "Medio sui soggetti"
+    # 5. Average over Subjects
     if not subject_averages:
         print("ERROR: No subjects successfully processed.")
         sys.exit(1)
 
     group_stack = np.vstack(subject_averages)
-    group_mean = np.mean(group_stack, axis=0) # Shape: (num_rois,)
-    print(f"Computed Group Matrix Mean over {len(subject_averages)} subjects.")
+    group_mean = np.mean(group_stack, axis=0)
+    print(f"Result: shape={group_mean.shape}, range=[{group_mean.min():.2f}, {group_mean.max():.2f}]")
 
-    # 6. Save Outputs
-    output_npy = config['output']['npy_path']
-    output_img = config['output']['img_path']
+    # 6. Save Output
+    output_dir = config.get('output_dir', '/data/etosato/RHOSTS/Output/lorenzo_data/node_strengths')
+    output_subdir = os.path.join(output_dir, mode)
+    os.makedirs(output_subdir, exist_ok=True)
     
-    # Ensure output dirs exist
-    os.makedirs(os.path.dirname(output_npy), exist_ok=True)
-    if output_img:
-        os.makedirs(os.path.dirname(output_img), exist_ok=True)
-
-    np.save(output_npy, group_mean)
-    print(f"Saved results to {output_npy}")
-
-    # 7. Visualization
-    if output_img:
-        print(f"Generating brain map at {output_img}...")
-        try:
-            cmap = mcolors.LinearSegmentedColormap.from_list(
-                "green_yellow_red", ["#2ca25f", "#ffffbf", "#d73027"]
-            )
-            
-            fig = None
-            if os.environ.get("DISPLAY") is None:
-                print("Using Nilearn fallback (headless).")
-                from ..visualization.utils_nilearn_brain import nilearn_view
-                fig = nilearn_view(
-                    current_nodestrength=group_mean,
-                    cmap='RdBu_r',
-                    title=f"Group Mean - {metric}"
-                )
-            else:
-                fig = normal_view(
-                    current_nodestrength=group_mean,
-                    edges=True,
-                    cmap=cmap,
-                    q_thresh=0.0,
-                    center_cbar=True,
-                    alpha_graymap=0.99,
-                    xlabel=r"$\langle s_i \rangle$"
-                )
-            
-            if fig:
-                fig.savefig(output_img, dpi=300, bbox_inches="tight")
-                print(f"Saved image to {output_img}")
-                plt.close(fig)
-        except Exception as e:
-            print(f"Warning: Visualization failed: {e}")
+    # Auto-generate filename based on config
+    n_subjects = len(subject_averages)
+    if scenario == 'all_frames':
+        filename = f"{mode}_all_frames_{n_subjects}subj.npy"
+    elif scenario == 'top_percent':
+        pct = int(percent * 100)
+        filename = f"{mode}_top{pct}pct_{metric}_{n_subjects}subj.npy"
+    elif scenario == 'single_frame':
+        frame_id = config.get('frame', 0)
+        filename = f"{mode}_frame{frame_id}_{n_subjects}subj.npy"
+    else:
+        filename = f"{mode}_{scenario}_{n_subjects}subj.npy"
+    
+    output_path = os.path.join(output_subdir, filename)
+    np.save(output_path, group_mean)
+    print(f"Saved results to {output_path}")
+    print("Transfer .npy to local machine for visualization.")
 
 if __name__ == "__main__":
     main()
