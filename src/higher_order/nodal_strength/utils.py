@@ -30,7 +30,7 @@ def _list_scaffold_frames(directory):
 
 
 def select_frames(
-    hd5_files,
+    data_sources,
     scenario,
     frame=None,
     percent=0.15,
@@ -43,10 +43,9 @@ def select_frames(
 
     Parameters
     ----------
-    hd5_files : list[str]
-        List of HDF5 files (or directories for scaffold mode; when using
-        scaffold, frame numbers are inferred from ``generators__*.pck`` files
-        present in every directory).
+    data_sources : list[str]
+        List of HDF5 files (DV mode) or directories (scaffold mode).
+        For scaffold, frame numbers are inferred from ``generators__*.pck`` files.
     scenario : {"single_frame", "all_frames", "top_percent"}
         Selection strategy.
     frame : int or None
@@ -85,11 +84,11 @@ def select_frames(
     # that fails, we are in scaffold mode and need to infer frames from
     # ``generators__*.pck`` files present in every subject directory.
     try:
-        with h5py.File(hd5_files[0], "r") as f:
+        with h5py.File(data_sources[0], "r") as f:
             all_frames = sorted(map(int, f.keys()))
     except (OSError, IsADirectoryError):
         # scaffold inputs are directories, so infer frames from the generator pickles
-        per_directory_frames = [_list_scaffold_frames(d) for d in hd5_files]
+        per_directory_frames = [_list_scaffold_frames(d) for d in data_sources]
         if scenario == "all_frames":
             if not all(per_directory_frames):
                 raise RuntimeError(
@@ -143,61 +142,3 @@ def select_frames(
 
     raise ValueError(f"Unknown scenario: {scenario!r}")
 
-
-# -----------------------------------------------------------------------------
-# AGGREGATION LOGIC (comune a DV e SCAFFOLD)
-# -----------------------------------------------------------------------------
-
-def aggregate_frames(hd5_files, frames, loader_fn, num_ROIs):
-    """
-    Aggregate nodal strength across subjects and frames.
-
-    Parameters
-    ----------
-    hd5_files : list[str]
-        Paths to hd5 files (DV pipeline) or scaffold directories (H1 pipeline).
-    frames : list[int]
-        Selected frame indices.
-    loader_fn : callable
-        Function that loads a single frame and returns a nodal strength vector:
-        ``loader_fn(hd5_or_dir, frame, num_ROIs) -> np.ndarray(num_ROIs,)``
-    num_ROIs : int
-        Number of brain regions expected in the nodal vector.
-
-    Returns
-    -------
-    np.ndarray(num_ROIs,)
-        Mean nodal strength across all valid subjects and frames.
-    """
-
-    total = np.zeros(num_ROIs, dtype=float)
-    count = 0  # number of successfully processed subject/frame pairs
-
-    for hd5_or_directory in hd5_files:
-        for frame in frames:
-            try:
-                strength = np.asarray(loader_fn(hd5_or_directory, frame, num_ROIs), dtype=float)
-            except Exception as exc:  # pragma: no cover - defensive logging
-                warnings.warn(
-                    f"Skipping subject={hd5_or_directory}, frame={frame}: {exc}",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
-                continue
-
-            if strength.shape[0] != num_ROIs:
-                warnings.warn(
-                    f"Skipping subject={hd5_or_directory}, frame={frame}: expected length {num_ROIs}, got {strength.shape[0]}",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
-                continue
-
-            # Accumulate the nodal strength vector and track the number of samples
-            total += strength
-            count += 1
-
-    if count == 0:
-        raise RuntimeError("No valid nodal strength vectors computed; check inputs and frames.")
-
-    return total / count

@@ -5,19 +5,14 @@ import h5py
 
 def compute_nodal_strength_dv(triangle_data, num_ROIs=100):
     """Convert violating triangle descriptors into per-node strength estimates."""
-    # ``triangle_data`` stores one row per edge (i, j) and encodes how many
-    # violating triangles contained that edge and the total weight accumulated
-    # across those triangles. Each row is expected to be shaped like:
-    #   [i, j, sum_w, count]
-    # where ``sum_w`` is the sum of weights for all triangles incident to (i, j)
-    # and ``count`` is the number of such triangles.
+    # triangle_data =  [i, j, sum_w, count]
     edge_weights = {}
 
     # Iterate over each violating triangle-derived edge descriptor
     for row in triangle_data:
         # vertices that define the edge
         i, j = int(row[0]), int(row[1])
-        # sum of the weights of triangles (i, j, k) that include this edge
+        # sum of the weights of triangles incident to (i, j)
         sum_w = row[2]
         # how many triangles include this edge
         count = row[3]
