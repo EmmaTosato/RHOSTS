@@ -1,0 +1,12 @@
+{
+    "mode": "scaffold",
+    "scenario": "top_percent",
+    "percent": 0.15,
+    "metric": "complexity",
+    "subjects_list_file": "/data/etosato/RHOSTS/src/subject_134829.txt",
+    "data_path_pattern_dv": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/{subject}_edge_projection.hd5",
+    "data_path_pattern_scaffold": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/generators",
+    "indicators_path_pattern": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/{subject}_indicators.txt",
+    "num_rois": 116,
+    "output_dir": "/data/etosato/RHOSTS/Output/lorenzo_data/node_strengths"
+}
