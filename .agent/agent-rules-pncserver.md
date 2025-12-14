@@ -34,15 +34,17 @@ Read always documentaions files.
 
 ---
 
-## Log Organization
+## Folder Organization
 
-### Directory Structure
+### Logs
+
+#### Directory Structure
 Every project must have a **`logs/`** directory at the root level:
 ```
 /data/etosato/<project_name>/Logs/
 ```
 
-### Organization Guidelines
+#### Organization Guidelines
 - Create a **subfolder for each task** or category of operations
 - Use clear, descriptive names that reflect the task being executed
 - Logs can be for the job (we use slurm in this server), or a script
@@ -60,11 +62,29 @@ Every project must have a **`logs/`** directory at the root level:
 │       └── generation_tests/
 ```
 
-### Test Logs
+#### Test Logs
 For tests that generate logs:
-- Create a **`test_reports/`** subfolder within `Logs/`
-- Organize into further subfolders by test type
+- Create a **`test_reports/`** subfolder within `Logs/`.
+- Organize into further subfolders by test type.
 - Example: `/data/etosato/<project>/Logs/test_reports/<test_type>/`
+
+### Test 
+For test scripts within the `Test/` directory:
+- Create a **subfolder for each task** being tested.
+- Use clear, descriptive names that reflect the task being tested.
+- **Reuse existing folders** when continuing the same task across different chat sessions.
+
+**Example:**
+```
+/data/etosato/<project>/
+├── Test/
+│   ├── scaffold_generation/
+│   │   ├── test_scaffold_integrity.py
+│   │   └── run_scaffold_tests.sh
+│   └── visualization/
+│       ├── test_brain_maps.py
+│       └── test_nilearn.py
+```
 
 ---
 

@@ -4,7 +4,7 @@
     "percent": 0.15,
     "metric": "coherence",
     "subjects_list_file": "/data/etosato/RHOSTS/Output/lorenzo_data/subjects.txt",
-    "data_path_pattern": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/{subject}_edge_weight.hdf5",
+    "data_path_pattern": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/{subject}_edge_projection.hd5",
     "indicators_path_pattern": "/data/etosato/RHOSTS/Output/lorenzo_data/{subject}/{subject}_indicators.txt",
     "num_rois": 116,
     "output": {
