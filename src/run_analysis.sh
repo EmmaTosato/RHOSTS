@@ -1,16 +1,16 @@
 #!/bin/bash
-#SBATCH -J rhosts_analysis
+#SBATCH -J rhosts_run
 #SBATCH -p brains
 #SBATCH --cpus-per-task=5
 #SBATCH --mem=32G
 #SBATCH -t 02:00:00
-#SBATCH -o /data/etosato/RHOSTS/Logs/%x_%j.out
-#SBATCH -e /data/etosato/RHOSTS/Logs/%x_%j.err
+#SBATCH -o /data/etosato/RHOSTS/Logs/nodal_strength/rhosts_run_%j.out
+#SBATCH -e /data/etosato/RHOSTS/Logs/nodal_strength/rhosts_run_%j.err
 
 set -euo pipefail
 
 # Configuration
-CONFIG_FILE="${1:-config.json}"
+CONFIG_FILE="${1:-src/config.json}"
 
 echo "Starting RHOSTS Analysis..."
 echo "Config File: ${CONFIG_FILE}"
@@ -28,6 +28,7 @@ fi
 # Environment Variables for Headless Execution
 export PYVISTA_OFF_SCREEN=true
 export MPLBACKEND=Agg
+export PYTHONPATH="${PYTHONPATH:-}:/data/etosato/RHOSTS/High_order_TS_with_scaffold"
 
 # Launch Analysis
 python -m src.higher_order.orchestration.main --config "${CONFIG_FILE}"
