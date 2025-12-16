@@ -10,7 +10,7 @@
 set -euo pipefail
 
 # Configuration
-CONFIG_FILE="${1:-src/config.json}"
+CONFIG_FILE="${1:-src/config/config.json}"
 
 echo "Starting RHOSTS Analysis..."
 echo "Config File: ${CONFIG_FILE}"
