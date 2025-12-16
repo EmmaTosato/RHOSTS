@@ -36,7 +36,7 @@ Follow the general log organization rules with these specifics:
 ### Test Organization
 Follow the general test organization rules with these specifics:
 - Test scripts: `/Users/emmatosato/Documents/PhD/Projects/RHOSTS/test/`
-- Test reports: `/Users/emmatosato/Documents/PhD/Projects/RHOSTS/logs/test_reports/<test_type>/`
+- Test reports: `/Users/emmatosato/Documents/PhD/Projects/RHOSTS//logs/test_reports/<test_type>/`
 
 ---
 

@@ -1,4 +1,4 @@
-# PNC Server Rules
+# Local Rules
 
 Rules specific to the **my lo local environment**.
 
@@ -88,44 +88,3 @@ For test scripts within the `test/` directory:
 
 ---
 
-## SLURM Execution
-
-### Required
-On this server, **all script executions must be submitted as SLURM jobs**. Scripts cannot be run directly on the compute node.
-
-### Template
-Use this template for SLURM job scripts:
-
-```bash
-#!/bin/sh
-#SBATCH -J name_of_job
-#SBATCH -p brains
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=20G
-#SBATCH -t 1-00:00:00
-#SBATCH -o /data/etosato/<project>/Logs/name_of_task/%x_%A_%a.out
-#SBATCH -e /data/etosato/<project>/Logs/name_of_task/%x_%A_%a.err
-```
-
-### Parameters
-- `-J`: Job name
-- `-p`: Partition (use `brains`)
-- `--cpus-per-task`: Number of CPUs (adjust as needed)
-- `--mem`: Memory allocation (adjust as needed)
-- `-t`: Time limit (format: `days-hours:minutes:seconds`)
-- `-o`: Standard output log path
-- `-e`: Standard error log path
-
-### Important
-- Adjust resource allocations based on task requirements
-- Ensure log directories exist before submitting jobs
-- Use `%x_%A_%a` pattern for job name, job ID, and array task ID
-
----
-
-## Project-Specific Information
-
-**Check `specific-project.md`** for the ulterior info you need. For example:
-- Conda environment name
-- Project-specific directory structure
-- Additional configurations
