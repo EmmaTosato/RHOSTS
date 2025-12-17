@@ -26,15 +26,111 @@ conda activate <environment_name>
 
 ---
 
-## Getting context
-Read always documentaions files. 
-- Search for the doc folder
-- If not found, search for the specific-project.md file. 
-- Explore all the files in the project folder to get a better understanding of the project.
+## Context Gathering Rules
+
+**MANDATORY: Before starting any task, you MUST execute these steps in order:**
+
+1. **FIRST**: Locate and read all documentation files:
+   - Search for `docs/`, `doc/`, or `Docs/` folders
+   - Look for README files, markdown files, or any documentation
+   - Read ALL documentation files found
+
+2. **SECOND**: Read the `specific-project.md` file to understand project-specific configurations
+
+3. **THIRD**: Explore and understand the project structure:
+   - Identify main code directories
+   - Understand the project organization
+   - Read key configuration files (package.json, requirements.txt, setup.py, etc.)
+
+4. **ONLY THEN**: Proceed with the requested task
+
+**These steps are NOT optional - execute them every time before starting work.**
+
+---
+
+## Documentation Tracking
+
+**MANDATORY: Document all work performed:**
+
+1. **Create or update documentation** for every task completed
+2. **Track progress and decisions** made during development
+3. **Document code structure and functionality** in appropriate files
+4. **User responsibility**: After task completion, the user will decide whether to:
+   - Keep documentation as-is
+   - Merge content with existing documentation
+   - Remove or reorganize documentation
+   - Use the agent to perform documentation management
+
+**The agent must maintain clear records of all work for user review.**
+
+---
+
+## Communication Guidelines
+
+**Documentation and Code - STRICT RULES:**
+- **ABSOLUTELY NO emoticons** in any documentation files, code comments, or configuration files
+- **ZERO TOLERANCE** for emoticons in source code, scripts, or technical documentation
+- Keep all written content professional and clear
+- Use plain text formatting for emphasis instead of emoticons
+- **VIOLATION OF THIS RULE IS UNACCEPTABLE**
 
 ---
 
 ## Folder Organization
+
+### Source Code Directory Structure
+
+**Every project MUST have a `src/` directory at the root for source code:**
+```
+/data/etosato/<project_name>/src/
+```
+
+**Organization rules:**
+- Organize code by **macro tasks** agreed upon with the user
+- Create clear, descriptive folder names that reflect the main functionality
+- Maintain separation between different major components
+
+**Example structure:**
+```
+/data/etosato/RHOSTS/
+├── src/
+│   ├── data_processing/
+│   │   ├── preprocessing.py
+│   │   └── cleaning.py
+│   ├── analysis/
+│   │   ├── statistical_analysis.py
+│   │   └── visualization.py
+│   └── models/
+│       ├── neural_network.py
+│       └── evaluation.py
+```
+
+### Output Directory Structure
+
+**Every project MUST have an `output/` directory at the root for generated outputs:**
+```
+/data/etosato/<project_name>/output/
+```
+
+**Organization rules:**
+- Organize outputs by **task or analysis type** agreed upon with the user
+- Use clear, descriptive subfolder names
+- Maintain consistency with source code organization where applicable
+
+**Example structure:**
+```
+/data/etosato/RHOSTS/
+├── output/
+│   ├── processed_data/
+│   │   ├── cleaned_dataset.csv
+│   │   └── normalized_features.pkl
+│   ├── figures/
+│   │   ├── correlation_plots/
+│   │   └── model_performance/
+│   └── results/
+│       ├── model_predictions.json
+│       └── statistical_summary.txt
+```
 
 ### Logs
 
@@ -125,7 +221,7 @@ Use this template for SLURM job scripts:
 
 ## Project-Specific Information
 
-**Check `specific-project.md`** for the ulterior info you need. For example:
+**Check `specific-project.md`** for additional information you need. For example:
 - Conda environment name
 - Project-specific directory structure
 - Additional configurations
