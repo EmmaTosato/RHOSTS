@@ -9,7 +9,9 @@ Contains `.sh` files for running different scripts
     
     https://zenodo.org/records/7210076#.Y0qhx-9BxhE
     
-- Parcellazione corticale: 100 regioni corticali (Schaefer atlas) + 19 regioni subcorticali = **119 ROI**
+- Parcellazione corticale: 100 regioni corticali (Schaefer atlas) + regioni subcorticali
+  - **Configurazione A**: 16 regioni subcorticali = **116 ROI totali**
+  - **Configurazione B**: 19 regioni subcorticali = **119 ROI totali**
 - Preprocessing
     - Rimozione motion e segnali confondenti (CSF, WM, GSR)
     - Bandpass filtering (0.01–0.15 Hz)
