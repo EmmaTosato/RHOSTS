@@ -28,7 +28,7 @@ fi
 # Environment Variables for Headless Execution
 export PYVISTA_OFF_SCREEN=true
 export MPLBACKEND=Agg
-export PYTHONPATH="${PYTHONPATH:-}:/data/etosato/RHOSTS/High_order_TS_with_scaffold"
+export PYTHONPATH="${PYTHONPATH:-}:/data/etosato/RHOSTS/high_order_ts_with_scaffold"
 
 # Launch Analysis
 python -m src.higher_order.orchestration.main --config "${CONFIG_FILE}"

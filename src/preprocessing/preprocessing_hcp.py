@@ -56,16 +56,16 @@ def main():
     ids = ["134829", "393247", "745555", "905147", "943862"]
 
     # Paths
-    base = "/data/etosato/RHOSTS/Preprocessing/HCP_rsfMRI"
-    cortex_atlas_path = "/Preprocessing/atlases/cortex_100.nii.gz"
-    sub_atlas_path = "/Preprocessing/atlases/subcortex_16.nii"
+    base = "/data/etosato/raw_data/HCP_rsfMRI"
+    cortex_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/cortex_100.nii.gz"
+    sub_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/subcortex_16.nii"
 
     # ROIs for the cortical atlas and the subcortical one
     n_rois_ctx = 100
     n_rois_sub = 16
 
     # Output directory for ROI time series
-    output_dir = "/Input/lorenzo_data/cortical_subcortical"
+    output_dir = "/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical"
     os.makedirs(output_dir, exist_ok=True)
 
     # Load atlas once

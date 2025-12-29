@@ -13,7 +13,7 @@ subjects=("134829" "393247" "745555" "905147" "943862")
 sub=${subjects[$SLURM_ARRAY_TASK_ID]}
 
 # Input code and files
-codepath="/data/etosato/RHOSTS/High_order_TS/simplicial_multivariate.py"
+codepath="/data/etosato/RHOSTS/high_order_ts/simplicial_multivariate.py"
 filename="/data/etosato/RHOSTS/Input/lorenzo_data/cortical_subcortical/${sub}_ts_zscore_ctx_sub.txt"
 
 # Output  files

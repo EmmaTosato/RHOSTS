@@ -25,7 +25,7 @@ conda activate rhosts
 # Memory Limits
 export JAVA_TOOL_OPTIONS="-Xms2G -Xmx16G"
 
-cd /data/etosato/RHOSTS/High_order_TS_with_scaffold/
+cd /data/etosato/RHOSTS/high_order_ts_with_scaffold/
 
 # Input codes and files
 codepath="simplicial_multivariate.py"
