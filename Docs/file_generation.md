@@ -57,7 +57,7 @@ mkdir -p /data/etosato/RHOSTS/Output/lorenzo_data/{subject}/generators
 ### How to Execute
 
 #### SLURM Job (Recommended)
-Use the example script: [launch_High_order_TS_with_edgesaving.sh](file:///data/etosato/RHOSTS/Example/launch_High_order_TS_with_edgesaving.sh)
+Use the example script: [launch_High_order_TS_with_edgesaving.sh](file:///data/etosato/RHOSTS/src/launchers/launch_High_order_TS_with_edgesaving.sh)
 
 ```bash
 #!/bin/sh
@@ -90,10 +90,10 @@ python ${codepath} ${filename} -t 0 3600 -p 5 -s ${weighted_network} > ${result_
 #### Job Submission
 ```bash
 # For all subjects (array job)
-sbatch --array=0-4 /data/etosato/RHOSTS/Example/launch_High_order_TS_with_edgesaving.sh
+sbatch --array=0-4 /data/etosato/RHOSTS/src/launchers/launch_High_order_TS_with_edgesaving.sh
 
 # For a single subject (modify the array index)
-sbatch --array=0 /data/etosato/RHOSTS/Example/launch_High_order_TS_with_edgesaving.sh
+sbatch --array=0 /data/etosato/RHOSTS/src/launchers/launch_High_order_TS_with_edgesaving.sh
 ```
 
 ### CLI Parameters

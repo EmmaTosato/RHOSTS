@@ -7,6 +7,10 @@ src/
 ├── config.json              # Analysis configuration
 ├── run_analysis.sh          # SLURM launch script
 ├── subject_134829.txt       # Subject list (1 subject)
+├── launchers/               # SLURM job scripts for different analyses
+│   ├── launch_High_order_TS.sh
+│   ├── launch_High_order_TS_with_edgesaving.sh
+│   └── launch_High_order_TS_with_scaffold.sh
 └── higher_order/
     ├── orchestration/
     │   └── main.py          # Main entry point

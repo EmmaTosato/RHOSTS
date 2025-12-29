@@ -10,18 +10,17 @@ RHOSTS/
 │   └── atlases/               # Brain atlases for ROI definition
 │       ├── cortex_100.nii.gz  # Cortical atlas (100 ROIs)
 │       └── subcortex_16.nii   # Subcortical atlas (16 ROIs)
-├── doc/                       # Documentation
-├── high_order_ts/             # Core algorithms (basic version)
-├── high_order_ts_with_scaffold/ # Algorithms with scaffold computation
-├── input/                     # Input data and examples
-├── log/                       # Log files organized by type
-├── notebooks/                 # Jupyter notebooks for analysis
-├── output/                    # Generated output files
-├── preprocessing/             # Preprocessing atlases (legacy)
+├── Docs/                      # Documentation
+├── High_order_TS/             # Core algorithms (basic version)
+├── High_order_TS_with_scaffold/ # Algorithms with scaffold computation
+├── Input/                     # Input data and examples
+├── Logs/                      # Log files organized by type
+├── Notebooks/                 # Jupyter notebooks for analysis
+├── Output/                    # Generated output files
 ├── src/                       # Source code
-├── test/                      # Test scripts
+├── Test/                      # Test scripts
 ├── utils/                     # Utility scripts
-└── external/                  # External dependencies
+└── External/                  # External dependencies
 ```
 
 ## Detailed Directory Descriptions
@@ -49,13 +48,13 @@ src/
 └── preprocessing/             # Data preprocessing tools
 ```
 
-#### `high_order_ts/`
+#### `High_order_TS/`
 Basic implementation of higher-order time series analysis:
 - **Purpose**: Compute topological indicators (complexity, coherence)
 - **Key files**: `simplicial_multivariate.py`, `utils.py`
 - **Output**: Indicators and edge projections
 
-#### `high_order_ts_with_scaffold/`
+#### `High_order_TS_with_scaffold/`
 Extended implementation including homological scaffold computation:
 - **Purpose**: Advanced topological analysis with scaffold structures  
 - **Dependencies**: Requires Javaplex and Jython
@@ -63,13 +62,13 @@ Extended implementation including homological scaffold computation:
 
 ### Data Directories
 
-#### `input/`
+#### `Input/`
 Input data and examples:
 - **Structure**: Organized by dataset (e.g., `lorenzo_data/`)
 - **Format**: Typically `.txt` files with z-scored time series
 - **Dimensions**: ROI × timepoints matrices
 
-#### `output/`
+#### `Output/`
 Generated analysis results:
 - **Structure**: Organized by subject and analysis type
 - **Contents**: 
@@ -77,7 +76,7 @@ Generated analysis results:
   - `.hd5` files: Edge projections and network data
   - `.pck` files: Scaffold generators (excluded from git)
 
-#### `log/`
+#### `Logs/`
 Organized by log type:
 - `slurm/`: SLURM job outputs and errors
 - `tests/`: Test execution logs  
@@ -85,17 +84,18 @@ Organized by log type:
 
 ### Support Directories
 
-#### `notebooks/`
+#### `Notebooks/`
 Jupyter notebooks for:
 - Data exploration and visualization
 - Analysis pipelines
 - Result interpretation
 - Tutorial examples
 
-#### `external/`
+#### `External/`
 External dependencies organized by language:
-- `java/`: Jython, Javaplex libraries
-- `python/`: PHAT, surfplot packages
+- `jython/`: Jython, Javaplex libraries
+- `phat/`: PHAT library for persistent homology
+- `surfplot/`: Surface plotting utilities
 
 #### `utils/`
 General utility scripts and helper functions.
