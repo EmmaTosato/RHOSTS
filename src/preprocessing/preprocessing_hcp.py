@@ -57,8 +57,8 @@ def main():
 
     # Paths
     base = "/data/etosato/raw_data/HCP_rsfMRI"
-    cortex_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/cortex_100.nii.gz"
-    sub_atlas_path = "/data/etosato/RHOSTS/Preprocessing/atlases/subcortex_16.nii"
+    cortex_atlas_path = "/data/etosato/RHOSTS/assets/atlases/cortex_100.nii.gz"
+    sub_atlas_path = "/data/etosato/RHOSTS/assets/atlases/subcortex_16.nii"
 
     # ROIs for the cortical atlas and the subcortical one
     n_rois_ctx = 100
