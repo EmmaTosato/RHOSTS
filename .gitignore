@@ -12,19 +12,4 @@ __pycache__/
 # Other
 *.ipynb_checkpoints/
 
-# Logs
-Logs
 
-# External Libraries
-External/
-
-## Heavy Data
-# Output
-Output
-
-# Intermediate output
-High_order_TS_with_scaffold/scaffold_gen
-
-
-# Input before preprocessing
-Preprocessing/
